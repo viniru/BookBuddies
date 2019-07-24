@@ -4,7 +4,7 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 from application.db import get_db
-vw = Blueprint('view', __name__, url_prefix='/view')
+vw = Blueprint('view', __name__, url_prefix='/view')        #Read auth.py for details
 
 @vw.route('/display')
 def display():
