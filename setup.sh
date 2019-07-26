@@ -1,4 +1,3 @@
-
 DIRECTORY="venv"
 if [ ! -d "$DIRECTORY" ]; then
   echo "setting up virtual environment"
@@ -6,7 +5,7 @@ if [ ! -d "$DIRECTORY" ]; then
 
   echo "activating virtual environment"
   . venv/bin/activate
-  
+
   echo "virtual environment created successfully"
 
   echo "install flask"
@@ -21,7 +20,7 @@ if [ ! -d "$DIRECTORY" ]; then
 else
   echo "activating virtual environment"
   . venv/bin/activate
-  
+
   echo "virtual environment activated successfully"
 
   echo "setting up few environment variables"
