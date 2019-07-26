@@ -40,5 +40,8 @@ def create_app(test_config=None,instance_relative_config=True):
     from . import view               # same as before. This is another view
     app.register_blueprint(view.vw)
 
+    from . import genres             
+    app.register_blueprint(genres.genre)
+
     return app
 

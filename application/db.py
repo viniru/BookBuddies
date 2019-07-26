@@ -12,12 +12,16 @@ def get_db():
         g.db = mysql
     return g.db
 
+def get_cursor():
+    return get_db().connection.cursor()
+
 
 def close_db(e=None):
     db = g.pop('db', None)
 
     if db is not None:
         cur = db.connection.cursor()
+        db.connection.commit()
         cur.close()
         db = None
 
