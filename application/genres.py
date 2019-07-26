@@ -11,9 +11,10 @@ def selectGenresDB():                 #Database operations
     cur = get_cursor()
     cur.execute('''SELECT name FROM Genre''')
     genres = cur.fetchall()
+    print(type(genres[0]))
     genresList = []
     for g in genres:
-        genresList.append(g[0])
+        genresList.append(g['name'])
     return genresList                       #return a list of genres
 
 def selectGenres():
@@ -39,6 +40,27 @@ def insertGenre(genre):               #Model
 
     return jsonify(response)
 
+def get_genre_id(genre):
+    cur = get_cursor()
+    cur.execute('''select g_id from Genre where STRCMP(name,'{0}') = 0'''.format(genre))
+    g_id = cur.fetchall()   
+    if g_id :           # assuming a None is returned if the genre is not present
+        return g_id[0]['g_id']           
+    return None
+
+
+def selectBookDetails(result,booklist):
+    cur = get_cursor()
+    cur.execute('''SELECT title, rating, no_ratings, cover FROM Book WHERE b_id in {0}'''.format(booklist))
+    vr = cur.fetchall()
+    if vr:	#If tuple is not empty
+        book_q = 'title, rating, no_ratings, cover, description'.split(', ') #Seperating elements to individual items to map them to values
+        for i in range(len(vr)):
+            result['details'].append({ 'Book':{} })
+            for j in range(len(book_q)):
+    	        result[i]['Book'][book_q[i]] = vr[i][book_q[i]]
+
+
 
 
 @genre.route('/add' , methods=['POST'])         #Controller
@@ -51,3 +73,4 @@ def addGenre():
 def listGenre():
     response = selectGenres()
     return response
+
