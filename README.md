@@ -16,3 +16,7 @@ This is a Team Project
 4) try, http://127.0.0.1:5000/auth/register?name=abc&password=xyz&email=xyz
 5) understand the directory structure, how the flow is working. If you dont understand, I will explain by sharing my screen
 6) start writing your tasks
+
+download:
+pip install flask-WTF
+pip install passlib

@@ -1,2 +1,6 @@
 venv/
 __pycache__/
+application/__init__.pyc
+application/auth.pyc
+application/db.pyc
+application/view.pyc

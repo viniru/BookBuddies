@@ -6,6 +6,7 @@ import os
 
 #test_config can be used if we are using some different configuration during test, now
 #we are hardcoding as you can see (for database that is)
+
 def create_app(test_config=None,instance_relative_config=True):
 
     app = Flask(__name__)   # create flask application
@@ -17,6 +18,8 @@ def create_app(test_config=None,instance_relative_config=True):
     app.config['MYSQL_USER'] = 'fhiZCqtsqe'
     app.config['MYSQL_PASSWORD'] = 'ff17M9rbwu'
     app.config['MYSQL_DB'] = 'fhiZCqtsqe'
+    app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+
     app.database = MySQL(app)       #we assign the mysql object to app.database here, we cannot create the object after any
                                     #request made, this will throw an error. We need to create in the beginning only
 
@@ -35,10 +38,9 @@ def create_app(test_config=None,instance_relative_config=True):
                                      #We are telling flask that, the view bp belongs to this particular object 'app', and when we 
                                      # do this, by default , all the functions that route using 'bp' get registered to this 
                                      # particular object
-                                
-                                   
+
+
     from . import view               # same as before. This is another view
     app.register_blueprint(view.vw)
 
     return app
-
