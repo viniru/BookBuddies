@@ -11,13 +11,15 @@ def selectGenresDB():                 #Database operations
     cur = get_cursor()
     cur.execute('''SELECT name FROM Genre''')
     genres = cur.fetchall()
-    return genres                       #return a list of genres
+    genresList = []
+    for g in genres:
+        genresList.append(g[0])
+    return genresList                       #return a list of genres
 
 def selectGenres():
     genres = selectGenresDB() 
-    genresJSON = {'genres':[]}         
-    for g in genres:
-        genresJSON['genres'].append(g[0])
+    genresJSON = {}
+    genresJSON['genres'] = genres         
     return jsonify(genresJSON)
 
 def insertGenreDB(genre):             #Database operations
@@ -26,14 +28,14 @@ def insertGenreDB(genre):             #Database operations
     
 
 def insertGenre(genre):               #Model
-    response = {'result':{}}
+    response = {}
     genres_present = selectGenresDB()
     
     if genre not in genres_present:
         insertGenreDB(genre)
         response['result'] = 'success'
     else:
-        response['result'] = 'Genre %s already present',genre
+        response['result'] = ('Genre {0} is already present'.format(genre))
 
     return jsonify(response)
 
