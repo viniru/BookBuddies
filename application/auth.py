@@ -9,8 +9,6 @@ from passlib.hash import sha256_crypt
 bp = Blueprint('auth', __name__, url_prefix='/auth')        #we create a blueprint for a view here, named bp
 #The url of any function  that uses bp will have prefix of '/auth/ in this case
 
-#asdadfSEGDWEFWEF
-
 # Registration form, rendered using HTML...
 class RegisterForm(Form):
     name = StringField('Name', [validators.Length(min=3, max=50)])
