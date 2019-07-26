@@ -17,7 +17,7 @@ def selectGenresDB():                 #Database operations
         genresList.append(g['name'])
     return genresList                       #return a list of genres
 
-def selectGenres():
+def selectGenres():                     # make a call to function that accesses database
     genres = selectGenresDB() 
     genresJSON = {}
     genresJSON['genres'] = genres         
@@ -40,7 +40,7 @@ def insertGenre(genre):               #Model
 
     return jsonify(response)
 
-def get_genre_id(genre):
+def get_genre_id(genre):            #Get genre id given genre
     cur = get_cursor()
     cur.execute('''select g_id from Genre where STRCMP(name,'{0}') = 0'''.format(genre))
     g_id = cur.fetchall()   
@@ -49,7 +49,7 @@ def get_genre_id(genre):
     return None
 
 
-def selectBookDetails(result,booklist):
+def selectBookDetails(result,booklist):     #get book details for all the b_ids of a particular g_id
     cur = get_cursor()
 
     format_strings = ','.join(['%s'] * len(booklist))
@@ -65,7 +65,7 @@ def selectBookDetails(result,booklist):
             for j in range(len(book_q)):
     	        result['details'][i]['Book'][book_q[j]] = vr[i][book_q[j]]
 
-def selectAuthorDetails(result,booklist):
+def selectAuthorDetails(result,booklist):   #get author details for all the b_ids of a particular g_id
     cur = get_cursor()
 
     format_strings = ','.join(['%s'] * len(booklist))
@@ -77,7 +77,7 @@ def selectAuthorDetails(result,booklist):
         for i in range(len(vr)):
             result['details'][i]['Author']['name'] = vr[i]['name']
 
-def getBookIdsGenre(g_id):
+def getBookIdsGenre(g_id):  #get a list of book ids with g_id = something
     cur = get_cursor()
     cur.execute('''select b_id from GenreBooks where g_id = {0}'''.format(g_id))        #get book ids of books beloning to a
     books = cur.fetchall()                                                              # particular genre
@@ -86,7 +86,7 @@ def getBookIdsGenre(g_id):
         booksList.append(b['b_id'])
     return booksList
 
-def selectBooksJson(genre):
+def selectBooksJson(genre):     #fetch and merge results
     g_id = get_genre_id(genre)
     booksList = getBookIdsGenre(g_id)
     result = {'details':[]}
@@ -96,7 +96,7 @@ def selectBooksJson(genre):
     return jsonify(result)
 
 
-def selectBooks(genre):
+def selectBooks(genre):         #check if the particular genre is present or not , then proceed
     result = {}     
     if genre in selectGenresDB():           #Check if this particular genre is present
         result = selectBooksJson(genre)
@@ -107,18 +107,18 @@ def selectBooks(genre):
 #######################################################################################################
 
 @genre.route('/add' , methods=['POST'])         #Controller
-def addGenre():
+def addGenre():                             #add a particular genre to the database
     genre = request.json['genre']
     response = insertGenre(genre)
     return response
 #######################################################################################################
 @genre.route('/list', methods=['GET'])         #Controller
-def listGenre():
+def listGenre():                           #list all the genres present
     response = selectGenres()
     return response
 #######################################################################################################
 @genre.route('/getBooks', methods=['POST'])         #Controller
-def getBooks():
+def getBooks():             # get a list of books with some details of a particular genre
     genre = request.json['genre']
     response = selectBooks(genre)
     return response
