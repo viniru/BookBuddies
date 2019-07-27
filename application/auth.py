@@ -73,6 +73,19 @@ def login():
         elif not sha256_crypt.verify(password_entered, password):    # Compare Passwords
             return 'Wrong Password'
 
+        session.clear()
+        session['logged_in'] = Treu
+        session['username'] = username
         return 'You are Logged in'      # If user exsits and passwords match.
 
     return render_template('login.html')
+
+
+# Logout
+@bp.route('/logout')
+def logout():
+    session.clear()
+    return 'You are now logged out'
+
+
+#  Authorization still need to implemented..
