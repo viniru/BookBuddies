@@ -25,22 +25,26 @@ def create_app(test_config=None,instance_relative_config=True):
 
     try:                                #when instance_relative_config = True (look at the parameter)
         os.makedirs(app.instance_path)  #app.instance_path -> all the config details are stored. I dont know what config details
-    except OSError:                     #if we are using a local db, it would be stored here. 
+    except OSError:                     #if we are using a local db, it would be stored here.
         pass
 
     from . import db                #We initialize app related stuff here -> go to db file for more details
     db.init_app(app)                # we are basically calling the init_app() function from here by importing it
 
-    from . import auth              # Here, auth contains some functions which can be classified as a view of specific type 
+    from . import auth              # Here, auth contains some functions which can be classified as a view of specific type
     app.register_blueprint(auth.bp) # NOT MVC VIEW. Here, view is basically a set of related events that can happen
                                      #like, authentication can be one view and you can have other such views
                                      # here, view name is bp
-                                     #We are telling flask that, the view bp belongs to this particular object 'app', and when we 
-                                     # do this, by default , all the functions that route using 'bp' get registered to this 
+                                     #We are telling flask that, the view bp belongs to this particular object 'app', and when we
+                                     # do this, by default , all the functions that route using 'bp' get registered to this
                                      # particular object
 
 
     from . import view               # same as before. This is another view
     app.register_blueprint(view.vw)
+
+
+    from . import user
+    app.register_blueprint(user.ur)
 
     return app
