@@ -47,4 +47,9 @@ def create_app(test_config=None,instance_relative_config=True):
     from . import user
     app.register_blueprint(user.ur)
 
+
+    from . import genres             
+    app.register_blueprint(genres.genre)
+
     return app
+
