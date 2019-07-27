@@ -5,8 +5,8 @@ from flask import Flask, jsonify, request #instead of passing on the app , we us
 from flask_mysqldb import MySQL
 import os
 
-
-def get_db():
+    
+def get_db():   
     if 'db' not in g:
         mysql = current_app.database
         g.db = mysql
@@ -15,13 +15,11 @@ def get_db():
 def get_cursor():
     return get_db().connection.cursor()
 
-
 def close_db(e=None):
     db = g.pop('db', None)
 
     if db is not None:
         cur = db.connection.cursor()
-        db.connection.commit()
         cur.close()
         db = None
 
