@@ -18,20 +18,20 @@ def selectGenresDB():                 #Database operations
     return genresList                       #return a list of genres
 
 def selectGenres():                     # make a call to function that accesses database
-    genres = selectGenresDB() 
+    genres = selectGenresDB()
     genresJSON = {}
-    genresJSON['genres'] = genres         
+    genresJSON['genres'] = genres
     return jsonify(genresJSON)
 
 def insertGenreDB(genre):             #Database operations
     cur = get_cursor()
     cur.execute('''insert into Genre(name) values(%s)''',[genre])
-    
+
 
 def insertGenre(genre):               #Model
     response = {}
     genres_present = selectGenresDB()
-    
+
     if genre not in genres_present:
         insertGenreDB(genre)
         response['result'] = 'success'
@@ -43,9 +43,9 @@ def insertGenre(genre):               #Model
 def get_genre_id(genre):            #Get genre id given genre
     cur = get_cursor()
     cur.execute('''select g_id from Genre where STRCMP(name,'{0}') = 0'''.format(genre))
-    g_id = cur.fetchall()   
+    g_id = cur.fetchall()
     if g_id :           # assuming a None is returned if the genre is not present
-        return g_id[0]['g_id']           
+        return g_id[0]['g_id']
     return None
 
 
@@ -57,9 +57,9 @@ def selectBookDetails(result,booklist):     #get book details for all the b_ids 
                 tuple(booklist))
 
     vr = cur.fetchall()
-    
-    if vr:	
-        book_q = 'title, rating, no_ratings, cover'.split(', ') 
+
+    if vr:
+        book_q = 'title, rating, no_ratings, cover'.split(', ')
         for i in range(len(vr)):
             result['details'].append({ 'Book':{},'Author':{} })
             for j in range(len(book_q)):
@@ -97,7 +97,7 @@ def selectBooksJson(genre):     #fetch and merge results
 
 
 def selectBooks(genre):         #check if the particular genre is present or not , then proceed
-    result = {}     
+    result = {}
     if genre in selectGenresDB():           #Check if this particular genre is present
         result = selectBooksJson(genre)
     else:
@@ -122,4 +122,3 @@ def getBooks():             # get a list of books with some details of a particu
     genre = request.json['genre']
     response = selectBooks(genre)
     return response
-
