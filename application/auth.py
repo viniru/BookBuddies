@@ -2,7 +2,7 @@ import functools
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
 )
-from application.db import get_db
+from application.db import get_db, get_cursor
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 
@@ -89,3 +89,67 @@ def logout():
 
 
 #  Authorization still need to implemented..
+
+
+# Account deletetion for a user...
+@bp.route('/deleteaccount', methods=['POST'])
+def delete():
+    u_id = request.json['u_id']
+
+    delete_user_book(u_id)
+    delete_user_comment(u_id)
+    delete_user_friend(u_id)
+    delete_user_friendRequest(u_id)
+    delete_user(u_id)
+
+    return 'success'
+
+# Remove user from BookList table
+def delete_user_book(u_id):
+    db = get_db()
+    cur = db.connection.cursor()
+    # Querying
+    cur.execute('''DELETE FROM BookList WHERE u_id = %s''', [u_id])
+
+    db.connection.commit()
+    cur.close()
+
+# Remove user from Comments table
+def delete_user_comment(u_id):
+    db = get_db()
+    cur = db.connection.cursor()
+    # Querying
+    cur.execute('''UPDATE Comments SET u_id = 23, title = NULL WHERE u_id = %s''', [u_id])
+
+    db.connection.commit()
+    cur.close()
+
+# Remove user from FriendRequest table
+def delete_user_friendRequest(u_id):
+    db = get_db()
+    cur = db.connection.cursor()
+    cur.execute('''DELETE FROM FriendRequest WHERE u_id_s = %s OR u_id_r = %s''', (u_id, u_id))
+    # Querying
+
+    db.connection.commit()
+    cur.close()
+
+# Remove user from Friends table
+def delete_user_friend(u_id):
+    db = get_db()
+    cur = db.connection.cursor()
+    # Querying
+    cur.execute('''DELETE FROM Friends WHERE u_id_1 = %s OR u_id_2 = %s''', (u_id, u_id))
+
+    db.connection.commit()
+    cur.close()
+
+# Remove user from User table
+def delete_user(u_id):
+    db = get_db()
+    cur = db.connection.cursor()
+    # Querying
+    cur.execute('''DELETE FROM User WHERE u_id = %s''', [u_id])
+
+    db.connection.commit()
+    cur.close()
