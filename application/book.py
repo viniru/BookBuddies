@@ -20,7 +20,7 @@ def bookExists(b_id):
         return False
     return True
 
-def getRatingDB(b_id):
+def getRatingOfBookDB(b_id):
     cur = get_cursor()
     cur.execute('''SELECT rating,no_ratings FROM Book where b_id = {0}'''.format(b_id))
     result = cur.fetchone()
@@ -30,47 +30,55 @@ def getRating(b_id):
     if bookExists(b_id) is not True:
         return 'Book with the given id does not exist'
     else:
-        rating = getRatingDB(b_id)[0]
+        rating = getRatingOfBookDB(b_id)[0]
     return str(round(rating,1))
 
 @bk.route('/getrating',methods=['POST'])
-def getBookRating():
-    response = {}
-    b_id = request.json['b_id']
+def getBookRating():                        #This uses database to fetch current user rating, if you
+    response = {}                           #already have the value, then you will need to change this
+    b_id = request.json['b_id']             #function to make it more efficient
     response['response'] = getRating(b_id)
     return response
 
 #################################################################### Update Rating
 
-def ratingPresent(u_id,b_id):
+def getRatingOfUserForBookDB(u_id,b_id):
     cur = get_cursor()
     cur.execute('''SELECT rating FROM UserBookRating where u_id = {0} and b_id = {1}'''.format(u_id,b_id))
     result = cur.fetchall()
     if len(result) is 0:
         return False,0
-    return True
+    return True,result[0]['rating']
 
-def updateRatingDB(b_id,u_id,newRating):
+def updateRatingDB(b_id,u_id,userRatingNew):
     cur = get_cursor()
-    rating,no_rating = getRatingDB(b_id)
-    ratingSum = rating * no_rating
-    flag = ratingPresent(u_id,b_id)
-    
+    bookRating,no_rating = getRatingOfBookDB(b_id)
+    ratingSum = bookRating * no_rating
+    flag, userRating = getRatingOfUserForBookDB(u_id,b_id)
+    newRatingOfBook = 0
     if flag is True:
-        if no_rating is not 0:
-            value = str(round( ((ratingSum-rating+newRating)/no_rating) , 1))
-        else:
-            value = str(round( rating , 1))
-        cur.execute('''UPDATE UserBookRating SET rating = {0} where u_id = {1} and b_id = {2}'''.format(newRating,u_id,b_id))
         
-    else:
-        value = str(round ( (rating+newRating)/(no_rating+1)),1)
-        cur.execute('''INSERT INTO UserBookRating(b_id,u_id,rating) VALUES({0},{1},{2})'''.format(b_id,u_id,newRating))
-        no_rating = no_rating + 1
+        if userRatingNew is 0:
+            cur.execute('''DELETE FROM UserBookRating where u_id = {1} and b_id = {2}'''.format(userRatingNew,u_id,b_id))
+            no_rating = no_rating - 1
+            if no_rating is not 0:
+                newRatingOfBook = str(round( (ratingSum - userRating )/no_rating, 1))
+            else:
+                newRatingOfBook = 0
+        else:
+            newRatingOfBook = str(round( (ratingSum - userRating + userRatingNew)/no_rating, 1))
+            cur.execute('''UPDATE UserBookRating SET rating = {0} where u_id = {1} and b_id = {2}'''.format(userRatingNew,u_id,b_id))
 
-    cur.execute('''Update Book SET rating = {2}, no_ratings = {1} where b_id = {0}'''.format(b_id,no_rating,newRating))
+
+    else:
+        no_rating = no_rating + 1
+        newRatingOfBook = str(round( ( (ratingSum+userRatingNew)/no_rating), 1))
+        if userRatingNew  is not 0:
+            cur.execute('''INSERT INTO UserBookRating(b_id,u_id,rating) VALUES({0},{1},{2})'''.format(b_id,u_id,userRatingNew))
+
+    cur.execute('''Update Book SET rating = {0}, no_ratings = {1} where b_id = {2}'''.format(newRatingOfBook,no_rating,b_id))
     get_db().connection.commit()
-    return value
+    return newRatingOfBook
 
 
 def updateRating(b_id,u_id,newRating):
@@ -88,16 +96,20 @@ def updateBookRating():
     rating = int(request.json['rating'])
     response['response'] = updateRating(b_id,u_id,rating)
     return response
+
+#################################################################### Get Book rating for a particular user
+@bk.route('/getuserrating',methods=['POST'])
+def getRatingOfUserForBook():
+    response = {}
+    u_id = request.json['u_id']
+    b_id = request.json['b_id']
+    response['response'] = getRatingOfUserForBookDB(u_id,b_id)[1]
+    return response
+
 #################################################################### ADD Book
 @bk.route('/add')
 def addbook():
     return 'Not yet implemented'
-
-
-
-
-
-
 
 @bk.route('/addcomment', methods=['POST'])
 def addcomment():
