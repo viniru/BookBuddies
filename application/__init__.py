@@ -48,7 +48,7 @@ def create_app(test_config=None,instance_relative_config=True):
     app.register_blueprint(user.ur)
 
 
-    from . import genres             
+    from . import genres
     app.register_blueprint(genres.genre)
 
 
@@ -59,4 +59,3 @@ def create_app(test_config=None,instance_relative_config=True):
     app.register_blueprint(book.bk)
 
     return app
-
