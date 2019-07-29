@@ -41,11 +41,7 @@ def acceptrequestDB(u_id_1, u_id_2):
 def checkfriendsDB(u_id_1, u_id_2):
 	db = get_db()
 	cur = db.connection.cursor()
-<<<<<<< HEAD
-	cur.execute('''SELECT * FROM Friends WHERE ((u_id_1 = %s AND u_id_2 = %s) OR (u_id_1 = %s AND u_id_2 = %s))''', (u_id_1, u_id_2, u_id_2, u_id_1))
-=======
 	cur.execute('''SELECT * FROM Friends WHERE ((u_id_1 = %s AND u_id_2 = %s) OR (u_id_2 = %s AND u_id_1 = %s))''', (u_id_1, u_id_2, u_id_1, u_id_2))
->>>>>>> 391406e4b4f5fbd697c4dbddd76c00096d4b7392
 	if not cur.fetchall():
 		return False
 	cur.close()
@@ -61,6 +57,9 @@ def acceptrequest():
 	if not usersExist(u_id_1, u_id_2):
 		response = {'response': 'One or both of the u_ids are invalid'}
 		return jsonify(response)
+
+	if FriendRequestExists(u_id_1, u_id_2):
+		return jsonify({'response': 'Friend Request doesn\'t exist'})
 
 	if not checkfriendsDB(u_id_1, u_id_2):
 		acceptrequestDB(u_id_1, u_id_2)
@@ -162,9 +161,11 @@ def denyRequest():
 
 def sendRequestDB(u_id_s,u_id_r):
 	cur = get_cursor()
+	if FriendRequestExists(u_id_1, u_id_2):
+		return {'response':'Friend Request Already Sent'}
 	cur.execute('''INSERT INTO FriendRequest(u_id_s,u_id_r) VALUES({0},{1})'''.format(u_id_s,u_id_r))
 	get_db().connection.commit()
-	return 'Friend Request Sent'
+	return {'response':'Friend Request Sent'}
 
 
 def validityOfRequest(u_id_s,u_id_r):
