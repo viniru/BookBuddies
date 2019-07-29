@@ -35,7 +35,7 @@ def acceptrequestDB(u_id_1, u_id_2):
 def checkfriendsDB(u_id_1, u_id_2):
 	db = get_db()
 	cur = db.connection.cursor()
-	cur.execute('''SELECT * FROM Friends WHERE ((u_id_1 = %s AND u_id_2 = %s) OR (u_id_2 = %s AND u_id_1 = %s))''', (u_id_1, u_id_2, u_id_2, u_id_1))
+	cur.execute('''SELECT * FROM Friends WHERE ((u_id_1 = %s AND u_id_2 = %s) OR (u_id_1 = %s AND u_id_2 = %s))''', (u_id_1, u_id_2, u_id_2, u_id_1))
 	if not cur.fetchall():
 		return False
 	cur.close()
