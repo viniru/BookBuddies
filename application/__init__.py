@@ -55,5 +55,8 @@ def create_app(test_config=None,instance_relative_config=True):
     from . import friends
     app.register_blueprint(friends.friend)
 
+    from . import book
+    app.register_blueprint(book.bk)
+
     return app
 
