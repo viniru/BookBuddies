@@ -58,6 +58,9 @@ def acceptrequest():
 		response = {'response': 'One or both of the u_ids are invalid'}
 		return jsonify(response)
 
+	if FriendRequestExists(u_id_1, u_id_2):
+		return jsonify({'response': 'Friend Request doesn\'t exist'})
+
 	if not checkfriendsDB(u_id_1, u_id_2):
 		acceptrequestDB(u_id_1, u_id_2)
 		response['response'] = 'Sucess!'
@@ -158,9 +161,11 @@ def denyRequest():
 
 def sendRequestDB(u_id_s,u_id_r):
 	cur = get_cursor()
+	if FriendRequestExists(u_id_1, u_id_2):
+		return {'response':'Friend Request Already Sent'}
 	cur.execute('''INSERT INTO FriendRequest(u_id_s,u_id_r) VALUES({0},{1})'''.format(u_id_s,u_id_r))
 	get_db().connection.commit()
-	return 'Friend Request Sent'
+	return {'response':'Friend Request Sent'}
 
 
 def validityOfRequest(u_id_s,u_id_r):
