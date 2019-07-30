@@ -58,11 +58,12 @@ def acceptrequest():
 		response = {'response': 'One or both of the u_ids are invalid'}
 		return jsonify(response)
 
-	if FriendRequestExists(u_id_1, u_id_2):
-		return jsonify({'response': 'Friend Request doesn\'t exist'})
-
 	if not checkfriendsDB(u_id_1, u_id_2):
+		if not FriendRequestExists(u_id_1, u_id_2):
+			return jsonify({'response': 'Friend Request doesn\'t exist'})
+
 		acceptrequestDB(u_id_1, u_id_2)
+		removeFriendRequestDB(u_id_1, u_id_2)
 		response['response'] = 'Sucess!'
 	else:
 		response['response'] = 'Already Friends!'
@@ -75,6 +76,13 @@ def unfriendDB(u_id_1, u_id_2):
 	db = get_db()
 	cur = db.connection.cursor()
 	cur.execute('''DELETE FROM Friends WHERE ((u_id_1 = %s AND u_id_2 = %s) OR (u_id_2 = %s AND u_id_1 = %s))''',(u_id_1, u_id_2, u_id_1, u_id_2))
+	db.connection.commit()
+
+
+def removeFriendRequestDB(u_id_1, u_id_2):
+	db = get_db()
+	cur = db.connection.cursor()
+	cur.execute('''DELETE FROM FriendRequest WHERE ((u_id_s = %s AND u_id_r = %s) OR (u_id_r = %s AND u_id_s = %s))''',(u_id_1, u_id_2, u_id_1, u_id_2))
 	db.connection.commit()
 
 
