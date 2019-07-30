@@ -115,7 +115,7 @@ def viewRequestsCompute(u_id):
 	list = viewRequestDB(u_id)
 	return list
 
-@friend.route('/viewrequests',methods=['POST'])
+@friend.route('/viewrequestsrecieved',methods=['POST'])
 def viewRequests():
 	response = {}												
 	u_id = request.json['u_id']								    
@@ -141,60 +141,58 @@ def viewFriends():
 	u_id = request.json['u_id']								    
 	response['response'] = viewFriendsCompute(u_id)
 	return response
-########################################################################## Deny Request
+########################################################################## cancel Request
 def FriendRequestExists(u_id_1,u_id_2):
 	cur = get_cursor()
-	cur.execute('''SELECT * FROM FriendRequest WHERE ((u_id_s = %s AND u_id_r = %s) OR (u_id_s = %s AND u_id_r = %s))''', (u_id_1, u_id_2, u_id_2, u_id_1))
-	if not cur.fetchall():
+	cur.execute('''SELECT count(*) FROM FriendRequest WHERE (u_id_s = {1} AND u_id_r = {0}) OR (u_id_s = {0} AND u_id_r = {1})'''.format(u_id_1, u_id_2))
+	count = cur.fetchone()['count(*)']
+	print(type(u_id_2))
+	if count is 0:
 		return False
-	cur.close()
 	return True
 
-def denyRequestDB(u_id1,u_id2):
+def cancelRequestDB(u_id1,u_id2):
 	cur = get_cursor()
 	if FriendRequestExists(u_id1,u_id2) is False:
 		return "The friend request does not exist"
 	cur.execute(''' delete from FriendRequest where u_id_s = {0} AND u_id_r = {1} '''.format(u_id1,u_id2))
 	get_db().connection.commit()
-	return "Friend Request Denied"
+	return "Friend Request Cancelled"
 
-@friend.route('/denyrequest',methods=['POST'])
-def denyRequest():
+@friend.route('/cancelrequest',methods=['POST'])
+def cancelRequest():
 	response = {}												
-	u_id_s = request.json['u_id_s']								
-	u_id_r = request.json['u_id_r']
-	response['response'] = denyRequestDB(u_id_s,u_id_r)
+	u_id_s = int(request.json['u_id_s'])								
+	u_id_r = int(request.json['u_id_r'])
+	response['response'] = cancelRequestDB(u_id_s,u_id_r)
 	return response
 ########################################################################## Send Request
 
 def sendRequestDB(u_id_s,u_id_r):
 	cur = get_cursor()
-	if FriendRequestExists(u_id_1, u_id_2):
-		return {'response':'Friend Request Already Sent'}
 	cur.execute('''INSERT INTO FriendRequest(u_id_s,u_id_r) VALUES({0},{1})'''.format(u_id_s,u_id_r))
 	get_db().connection.commit()
-	return {'response':'Friend Request Sent'}
+	return 'Friend Request Sent'
 
 
 def validityOfRequest(u_id_s,u_id_r):
-	response = {}
 	if u_id_s == u_id_r:
-		response['response'] =  "you cannot send friend request to yourself"
+		return  "you cannot send friend request to yourself"
 	elif usersExist(u_id_s,u_id_r) is not True:
-		response['response'] = "One or more users dont exist"
+		return "One or more users dont exist"
 	elif checkfriendsDB(u_id_s,u_id_r) is True:
-		response['response'] = 'Already Friends'
+		return 'Already Friends'
 	elif FriendRequestExists(u_id_s,u_id_r):
-		response['response'] = "Already sent"
+		return "Already sent"
 	else:
-		response['response'] = sendRequestDB(u_id_s,u_id_r)	
-	return response			
+		return sendRequestDB(u_id_s,u_id_r)			
 
 @friend.route('/sendrequest',methods=['POST'])
 def sendRequest():
+	response = {}
 	u_id_s = request.json['u_id_s']			
 	u_id_r = request.json['u_id_r']
-	response = validityOfRequest(u_id_s,u_id_r)
+	response['response'] = validityOfRequest(u_id_s,u_id_r)
 	return response
 	
 
