@@ -8,13 +8,14 @@ from passlib.hash import sha256_crypt
 
 ur = Blueprint('user', __name__, url_prefix='/user')
 
+############################################## add book a user ######################################################
 @ur.route('/addbook', methods=['POST'])
 def addbook():
     u_id = request.json['u_id']
     b_id = request.json['b_id']
     status = request.json['status']
 
-    if check_if_book_exists_for_user(u_id, b_id) :     # If book exists for same user...
+    if book_exists_for_user(u_id, b_id) :     # If book exists for same user...
         return 'Already exists!!'
     else:
         add_book_for_user(u_id, b_id, status)
@@ -22,7 +23,7 @@ def addbook():
 
 
 # Method to check if the book already exists for the user...
-def check_if_book_exists_for_user(u_id, b_id):
+def book_exists_for_user(u_id, b_id):
     db = get_db()
     cur = db.connection.cursor()
 
@@ -49,8 +50,10 @@ def add_book_for_user(u_id, b_id, status):
     db.connection.commit()
     cur.close()
 
+######################################################################################################################
 
-#  View books for a user with a status....
+
+########################################### View books for a user ####################################################
 @ur.route('/viewbooks', methods=['GET', 'POST'])
 def viewbooks():
     # Getting details of user and status..
@@ -65,6 +68,7 @@ def getbooks(u_id, status):
     cur = db.connection.cursor()
 
     # Query..
+    
     result = cur.execute('''SELECT b_id FROM BookList WHERE u_id = %s and status = %s''', (u_id, status))
     books = cur.fetchall()
     if result > 0:
@@ -72,7 +76,9 @@ def getbooks(u_id, status):
     else:
         return 'No Books'
 
+#######################################################################################################################
 
+########################################### remove book from a user ###################################################
 @ur.route('/removebook', methods=['POST'])
 def removebook():
     # Getting details of the book to be removed.
