@@ -67,16 +67,22 @@ def getbooks(u_id, status):
     db = get_db()
     cur = db.connection.cursor()
 
-    # Query..
-    
-    result = cur.execute('''SELECT b_id FROM BookList WHERE u_id = %s and status = %s''', (u_id, status))
+    # Querying..
+    cur.execute('''SELECT Book.title
+        FROM BookList
+        LEFT JOIN Book
+        ON Book.b_id = BookList.b_id
+        WHERE u_id = %s AND status = %s ''', (u_id, status))
+
     books = cur.fetchall()
-    if result > 0:
+
+    if books > 0:
         return jsonify(books)
     else:
         return 'No Books'
 
 #######################################################################################################################
+
 
 ########################################### remove book from a user ###################################################
 @ur.route('/removebook', methods=['POST'])
@@ -98,3 +104,5 @@ def remove_book_from_user(u_id, b_id, status):
     cur.close()
 
     return 'Removed'
+
+#######################################################################################################################
