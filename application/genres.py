@@ -31,7 +31,7 @@ def selectGenres():                     # make a call to function that accesses 
     genres = selectGenresDB()
     genresJSON = {}
     genresJSON['genres'] = genres
-    return jsonify(genresJSON)
+    return genresJSON
 
 def insertGenreDB(genre):             #Database operations
     cur = get_cursor()
@@ -133,8 +133,9 @@ def addGenre():                             #add a particular genre to the datab
     return response
 #######################################################################################################
 @genre.route('/list', methods=['GET'])         #Controller
-def listGenre():                           #list all the genres present
-    response = selectGenres()
+def listGenre():
+    response = {}                           #list all the genres present
+    response["response"] = selectGenresDB()
     return response
 
 #######################################################################################################
