@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_mysqldb import MySQL
+from flask_cors import CORS, cross_origin
 import os
 
 #This function will be called when we type the command 'flask run' from the terminal
@@ -10,9 +11,12 @@ import os
 def create_app(test_config=None,instance_relative_config=True):
 
     app = Flask(__name__)   # create flask application
+    cors = CORS(app)
     app.config.from_mapping(       #dev environment
         SECRET_KEY='dev'
     )
+
+    app.config['CORS_HEADERS'] = 'Content-Type'
 
     app.config['MYSQL_HOST'] = 'remotemysql.com'
     app.config['MYSQL_USER'] = 'fhiZCqtsqe'
