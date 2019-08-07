@@ -9,3 +9,6 @@ application/user.pyc
 application/view.pyc
 application/book.pyc
 node_modules
+application/frontend/src/reference-App.js
+application/frontend/src/components/-ref Genres.js
+application/frontend/src/components/ref - genreForm.js
