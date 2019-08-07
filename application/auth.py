@@ -10,8 +10,7 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')        #we create a bluepri
 #The url of any function  that uses bp will have prefix of '/auth/ in this case
 
 
-
-##################################################################################################################
+######################################################### Register #####################################################################
 # Registration form, rendered using HTML...
 class RegisterForm(Form):
     name = StringField('Name', [validators.Length(min=3, max=50)])
@@ -23,7 +22,6 @@ class RegisterForm(Form):
         validators.EqualTo('confirm', message='Passwords do not match')
     ])
     confirm  = PasswordField('Confirm Password')
-
 
 # Register
 @bp.route('/register' , methods=['GET','POST'])
@@ -41,15 +39,15 @@ def register():
         elif username_exists(username):
             return 'username already exists'
 
-        # email and username are unique Registering new user....
-        return update_User(name, email, username, password)
+        # email and username are unique.. Registering new user....
+        return add_User(name, email, username, password)
 
     return render_template('register.html', form=form)
 
+# return True if email already exists..
 def email_exists(email):
-    db = get_db()
-    cur = db.connection.cursor()
-
+    cur = get_cursor()
+    # Querying
     result = cur.execute('''SELECT u_id from User WHERE email = %s''', [email])
     cur.close()
 
@@ -58,11 +56,10 @@ def email_exists(email):
     else :
         return False
 
-# Checks if username already exists
+# returns True if username already exists
 def username_exists(username):
-    db = get_db()
-    cur = db.connection.cursor()
-
+    cur = get_cursor()
+    # Querying
     result = cur.execute('''SELECT u_id from User WHERE username = %s''', [username])
     cur.close()
 
@@ -72,7 +69,7 @@ def username_exists(username):
         return False
 
 # Insert new user into the User table
-def update_User(name, email, username, password):
+def add_User(name, email, username, password):
     db = get_db()
     cur = db.connection.cursor()
 
@@ -82,32 +79,29 @@ def update_User(name, email, username, password):
 
     return 'Success'
 
-#####################################################################################################################
+########################################################################################################################################
 
 
-############################################### Login  ########################################################
+########################################################### Login ######################################################################
 @bp.route('/login', methods = ['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        # Get fields
         username = request.form['username']
         password_entered = request.form['password']
-
-        data  = get_details(username, password_entered)
-        print(data)
+        data  = get_details(username)
 
         if data is None:                    # No user exists
             return 'No user found'
-            #flash('No user found' )
-            #return render_template('login.html')
+            # flash('No user found' )
+            # return render_template('login.html')
 
         password = data['password']
         u_id = data['u_id']
 
-        if not sha256_crypt.verify(password_entered, password):    # Compare Passwords
-            return 'Wrong Password'
-            #flash('Wrong Password')
-            #return render_template('login.html')
+        if not sha256_crypt.verify(password_entered, password):    # compare passwords
+            return 'Wrong Password'                               # password didn't match
+            # flash('Wrong Password')
+            # return render_template('login.html')
 
         # User exists and Password Matched. logging in...
         initialize_session(username, u_id)
@@ -115,18 +109,15 @@ def login():
 
     return render_template('login.html')
 
-# get the details that the user typed in..
-def get_details(username, password_entered):
-    # Access DB
-    db = get_db()
-    cur = db.connection.cursor()
-
-    # Query
+# get the details of the user...
+def get_details(username):
+    cur = get_cursor()
+    # Querying
     result = cur.execute("SELECT u_id, password FROM User WHERE username = %s", [username])
     data = cur.fetchone()
     cur.close()
 
-    return data
+    return data        # contains u_id and encrypted password..
 
 # initialize session for a user....
 def initialize_session(username, u_id):
@@ -135,31 +126,34 @@ def initialize_session(username, u_id):
     session['username'] = username
     session['u_id'] = u_id
 
-#####################################################################################################################
+########################################################################################################################################
 
 
-############################################### Logout  #############################################################
+########################################################## Logout ######################################################################
 @bp.route('/logout')
 def logout():
     session['logged_in'] = False
     session.clear()
     return 'You are now logged out'
 
-#####################################################################################################################
+########################################################################################################################################
 
 
-################################################ Account deletetion ##################################################
+######################################################### Account deletetion ###########################################################
 @bp.route('/deleteaccount', methods=['POST'])
 def delete():
     u_id = request.json['u_id']
+    initialize_delete_user(u_id)
 
+    return 'success'
+
+# removes user from all the tables.
+def initialize_delete_user(u_id):
     delete_user_book(u_id)
     delete_user_comment(u_id)
     delete_user_friend(u_id)
     delete_user_friendRequest(u_id)
     delete_user(u_id)
-
-    return 'success'
 
 # Remove user from BookList table
 def delete_user_book(u_id):
@@ -185,8 +179,8 @@ def delete_user_comment(u_id):
 def delete_user_friendRequest(u_id):
     db = get_db()
     cur = db.connection.cursor()
-    cur.execute('''DELETE FROM FriendRequest WHERE u_id_s = %s OR u_id_r = %s''', (u_id, u_id))
     # Querying
+    cur.execute('''DELETE FROM FriendRequest WHERE u_id_s = %s OR u_id_r = %s''', (u_id, u_id))
 
     db.connection.commit()
     cur.close()
@@ -211,4 +205,4 @@ def delete_user(u_id):
     db.connection.commit()
     cur.close()
 
-######################################################################################################################
+########################################################################################################################################
