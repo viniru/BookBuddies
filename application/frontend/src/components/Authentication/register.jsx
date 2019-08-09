@@ -62,7 +62,6 @@ class Register extends Component {
     handleSubmit = event => {
       event.preventDefault();
       const isValid = this.validate();
-      console.log(isValid);
 
       if(isValid) {
           fetch("http://localhost:5000/auth/register",
@@ -80,7 +79,6 @@ class Register extends Component {
             }
           ).then(response => response.json())
           .then(json => {
-            console.log(json);
             this.setState({
               email_exists : json.email_exists,
               username_exists : json.username_exists,
@@ -93,9 +91,7 @@ class Register extends Component {
 
 
     handleLogin = event => {
-      console.log('ia m here');
       this.setState({displayLogin : true});
-      console.log(this.state);
     }
 
     render() {
@@ -114,6 +110,7 @@ class Register extends Component {
                               <button type="button" className="close" data-dismiss="alert">&times;</button>
                               <strong>Invalid Username!</strong> Username already exists.
                             </div>;
+                            
       const passwordAlert = <div className="alert alert-danger alert-dismissible">
                               <button type="button" className="close" data-dismiss="alert">&times;</button>
                               <strong>Password</strong> did not match.

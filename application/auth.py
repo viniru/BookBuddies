@@ -51,6 +51,8 @@ def register():
     if(add_User(name, email, username, password)):
         response['success'] = True
 
+    login()
+
     return  json.dumps(response)
 
 
@@ -101,7 +103,7 @@ def login():
 
     response = {
         "username_exists" : False,
-        "password_matched" : False
+        "password_matched" : True
     }
 
     if data is None:                    # No user exists
@@ -113,6 +115,7 @@ def login():
     u_id = data['u_id']
 
     if not sha256_crypt.verify(password_entered, password):     # compare passwords
+        response["password_matched"] = False;
         return json.dumps(response)                               # password didn't match
 
     response["password_matched"] = True                    # password matched...

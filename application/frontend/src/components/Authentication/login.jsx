@@ -22,7 +22,6 @@ class Login extends Component {
 
     handleSubmit = event => {
       event.preventDefault();
-      let response = {};
       fetch('http://localhost:5000/auth/login',
         {
           method : "post",
@@ -35,29 +34,49 @@ class Login extends Component {
             'content-Type' : 'application/json'
           }
         }
-     ).then(response => response.json())
-     .then(json => {console.log(json); this.setState({success : json.password_matched && json.username_exists}); console.log(this.state);});
+     ).then(response =>
+       response.json()
+     )
+     .then(json =>
+       this.setState(
+       {
+         usernameError : !json.username_exists,
+         passwordError : !json.password_matched,
+         success : json.password_matched && json.username_exists
+       }
+     )
+   );
 
-    };
+  };
 
 
     handleSignUp = event => {
-      console.log('iam here');
       this.setState({displayRegister : true});
-      console.log(this.state);
     }
 
 
     render() {
+
+      const usernameAlert = <div className="alert alert-danger alert-dismissible">
+                              <button type="button" className="close" data-dismiss="alert">&times;</button>
+                              <strong>Invalid Username!</strong> user not found,.
+                            </div>;
+
+      const passwordAlert = <div className="alert alert-danger alert-dismissible">
+                              <button type="button" className="close" data-dismiss="alert">&times;</button>
+                              <strong>Wrong password!</strong> Please try again.
+                            </div>;
+
       const output = this.state.success ?
         <Home /> :
         this.state.displayRegister ?
-        <Register />
-        :
+        <Register /> :
         <div className="jumbotron jumbotron-fluid">
           <div className="container">
           <h1>Login</h1>
           <form onSubmit = {this.handleSubmit}>
+            {this.state.usernameError ? usernameAlert : null}
+            {this.state.passwordError ? passwordAlert : null}
             <div className = "form-group">
               <label>Username:</label>
               <input
