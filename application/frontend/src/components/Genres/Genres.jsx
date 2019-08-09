@@ -1,47 +1,31 @@
-import "whatwg-fetch";
 import React, { Component } from "react";
+import GenresList from "./GenresList.jsx";
+
 class Genres extends Component {
   state = {
     count: 0,
-    genres: []
+    display: false
   };
 
-  componentDidMount() {
-    fetch("http://localhost:5000/genre/list")
-      .then(response => response.json())
-      .then(
-        result => {
-          this.setState({
-            isLoaded: true,
-            genres: result.response,
-            count: result.response.length
-          });
-        },
-
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-
-        error => {
-          this.setState({
-            isLoaded: true,
-            error
-          });
-
-          console.log("error : " + error);
-        }
-      );
-  }
+  openGenres = () => {
+    this.props.activeComponent(this.props.id);
+    var display = true;
+    this.setState({ display });
+  };
 
   render() {
     return (
       <React.Fragment>
-        <button
-          onClick={() => this.props.activeComponent(this.props.id)}
-          className="btn btn-primary m-4 btn-lg"
-        >
-          Genres({this.formatCount()})
-        </button>
+        {this.props.visibility && (
+          <button
+            onClick={this.openGenres}
+            className="btn btn-primary m-4 btn-lg"
+          >
+            Genres({this.formatCount()})
+          </button>
+        )}
+
+        {this.state.display && <GenresList />}
       </React.Fragment>
     );
   }

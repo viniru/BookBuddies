@@ -22,7 +22,7 @@ class App extends Component {
 
   activeComponent = compo => {
     var display = [];
-    display.push(compo);
+    //display.push(compo);
     this.setState({ display });
   };
 
@@ -30,35 +30,30 @@ class App extends Component {
     return (
       <div>
         <h1> Book Buddies</h1>
-        {this.checkVisibility(1) ? (
-          <Books
-            id={1}
-            displayAllComponent={this.displayAllComponent}
-            activeComponent={this.activeComponent}
-          />
-        ) : null}
-
-        {this.checkVisibility(2) ? (
-          <MyBooks
-            id={2}
-            displayAllComponent={this.displayAllComponent}
-            activeComponent={this.activeComponent}
-          />
-        ) : null}
-        {this.checkVisibility(3) ? (
-          <Friends
-            id={3}
-            displayAllComponent={this.displayAllComponent}
-            activeComponent={this.activeComponent}
-          />
-        ) : null}
-        {this.checkVisibility(4) ? (
-          <Genres
-            id={4}
-            displayAllComponent={this.displayAllComponent}
-            activeComponent={this.activeComponent}
-          />
-        ) : null}
+        <Books
+          id={1}
+          visibility={this.checkVisibility(1)}
+          displayAllComponent={this.displayAllComponent}
+          activeComponent={this.activeComponent}
+        />
+        <MyBooks
+          id={2}
+          visibility={this.checkVisibility(2)}
+          displayAllComponent={this.displayAllComponent}
+          activeComponent={this.activeComponent}
+        />
+        <Friends
+          id={3}
+          visibility={this.checkVisibility(3)}
+          displayAllComponent={this.displayAllComponent}
+          activeComponent={this.activeComponent}
+        />
+        <Genres
+          id={4}
+          visibility={this.checkVisibility(4)}
+          displayAllComponent={this.displayAllComponent}
+          activeComponent={this.activeComponent}
+        />
       </div>
     );
   }
