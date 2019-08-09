@@ -119,7 +119,8 @@ def login():
 
     # User exists and Password Matched. logging in...
     initialize_session(username, u_id)
-    return json.dumps(response)
+    print(response)
+    return jsonify(response)
 
 # get the details of the user...
 def get_details(username):

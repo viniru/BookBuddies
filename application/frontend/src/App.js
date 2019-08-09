@@ -6,19 +6,15 @@ import Genres from "./components/Genres/Genres.jsx";
 import MyBooks from "./components/MyBooks/MyBooks.jsx";
 import Login from "./components/Authentication/login.jsx"
 import Register from "./components/Authentication/register.jsx"
+import Home from "./components/HomePage/Home.jsx"
 
 class App extends Component {
   state = {};
   render() {
     return (
       <div>
-        <h1> Book Buddies</h1>
+        <h1>Book Buddies</h1>
         <Register />
-        <Login />
-        <Books />
-        <MyBooks />
-        <Friends />
-        <Genres />
       </div>
     );
   }

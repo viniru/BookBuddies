@@ -1,31 +1,15 @@
 import React, { Component } from 'react';
-class Login extends Component {
+import Home from '../HomePage/Home.jsx';
+import Register from './register.jsx';
 
+class Login extends Component {
     state = {
         username : "",
         password : "",
-        usernameError : "haha",
-        passworError : ""
+        success: false,
+        displayRegister : false
     };
 
-    // validate = () => {
-    //   let usernameError = "";
-    //   let passwordError = "";
-    //
-    //   if(!this.state.password.includes('@')) {
-    //     passwordError = "password invalid";
-    //     this.setState({passwordError : "Wrong password" });
-    //   }
-    //   if(!(this.state.username.length > 6) ) {
-    //     usernameError = "invalid username";
-    //     this.setState({usernameError : "invalid username"})
-    //   }
-    //   if(usernameError || passwordError) {
-    //     return false;
-    //   }
-    //
-    //   return true;
-    // }
 
     handleChange = event  => {
       this.setState(
@@ -35,8 +19,10 @@ class Login extends Component {
       );
     };
 
+
     handleSubmit = event => {
       event.preventDefault();
+      let response = {};
       fetch('http://localhost:5000/auth/login',
         {
           method : "post",
@@ -50,45 +36,67 @@ class Login extends Component {
           }
         }
      ).then(response => response.json())
-     .then(json => console.log(json));
+     .then(json => {console.log(json); this.setState({success : json.password_matched && json.username_exists}); console.log(this.state);});
+
     };
 
+
+    handleSignUp = event => {
+      console.log('iam here');
+      this.setState({displayRegister : true});
+      console.log(this.state);
+    }
+
+
     render() {
-        return (
-          <div className="jumbotron">
-            <div className = "container">
-              <form onSubmit = {this.handleSubmit}>
-
-                <div className = "form-group">
-                  <label>Username:</label>
-                  <input
-                    name = "username"
-                    className="form-control"
-                    placeholder = "Enter your username"
-                    value = {this.state.username}
-                    onChange = {this.handleChange}
-                  />
-                </div>
-
-                <div className = "form-group">
-                  <label>Password:</label>
-                  <input
-                    className = "form-control"
-                    name = "password"
-                    type="password"
-                    placeholder="Enter your password"
-                    value = {this.state.password}
-                    onChange={this.handleChange}
-                  />
-                </div>
-
-                  <button className="btn btn-primary" type="submit">Login</button>
-
-              </form>
+      const output = this.state.success ?
+        <Home /> :
+        this.state.displayRegister ?
+        <Register />
+        :
+        <div className="jumbotron jumbotron-fluid">
+          <div className="container">
+          <h1>Login</h1>
+          <form onSubmit = {this.handleSubmit}>
+            <div className = "form-group">
+              <label>Username:</label>
+              <input
+                name = "username"
+                className="form-control"
+                placeholder = "Enter your username"
+                value = {this.state.username}
+                onChange = {this.handleChange}
+              />
             </div>
+
+            <div className = "form-group">
+              <label>Password:</label>
+              <input
+                className="form-control"
+                name="password"
+                type="password"
+                placeholder="Enter your password"
+                value={this.state.password}
+                onChange={this.handleChange}
+              />
+            </div>
+
+              <button className="btn btn-primary" type="submit">Login</button>
+              <button className="btn btn-link" type = "button" onClick={this.handleSignUp}>Not a member? Sign Up</button>
+
+          </form>
           </div>
-        );
+        </div>;
+
+
+      return (
+        <div>
+          {output}
+        </div>
+      );
+
     }
 }
+
 
 export default Login;
