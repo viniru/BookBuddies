@@ -35,9 +35,14 @@ class Genres extends Component {
 
   render() {
     return (
-      <button onClick="" className="btn btn-primary m-4 btn-lg">
-        Genres({this.formatCount()})
-      </button>
+      <React.Fragment>
+        <button
+          onClick={() => this.props.activeComponent(this.props.id)}
+          className="btn btn-primary m-4 btn-lg"
+        >
+          Genres({this.formatCount()})
+        </button>
+      </React.Fragment>
     );
   }
 
