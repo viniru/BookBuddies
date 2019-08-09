@@ -3,7 +3,6 @@ import GenresList from "./GenresList.jsx";
 
 class Genres extends Component {
   state = {
-    count: 0,
     display: false
   };
 
@@ -21,17 +20,13 @@ class Genres extends Component {
             onClick={this.openGenres}
             className="btn btn-primary m-4 btn-lg"
           >
-            Genres({this.formatCount()})
+            Genres
           </button>
         )}
 
         {this.state.display && <GenresList />}
       </React.Fragment>
     );
-  }
-
-  formatCount() {
-    return this.state.count;
   }
 }
 

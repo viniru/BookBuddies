@@ -1,8 +1,13 @@
 import React, { Component } from "react";
 class GenresList extends Component {
   state = {
+    count: 0,
     genres: []
   };
+
+  formatCount() {
+    return this.state.count;
+  }
 
   componentDidMount() {
     fetch("http://localhost:5000/genre/list")
@@ -34,7 +39,7 @@ class GenresList extends Component {
   render() {
     return (
       <div>
-        <h1>Genres</h1>
+        <h1>Genres({this.formatCount()})</h1>
         <ul>
           {this.state.genres.map(genre => (
             <li key={genre}> {genre} </li>
