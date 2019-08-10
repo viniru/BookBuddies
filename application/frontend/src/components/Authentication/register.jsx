@@ -110,7 +110,7 @@ class Register extends Component {
                               <button type="button" className="close" data-dismiss="alert">&times;</button>
                               <strong>Invalid Username!</strong> Username already exists.
                             </div>;
-                            
+
       const passwordAlert = <div className="alert alert-danger alert-dismissible">
                               <button type="button" className="close" data-dismiss="alert">&times;</button>
                               <strong>Password</strong> did not match.
@@ -122,7 +122,7 @@ class Register extends Component {
       <Login /> :
       <div className ="jumbotron jumbotron-fluid">
         <div className="container">
-          <h1>REGISTER </h1>
+          <h1>Register   </h1>
           <form onSubmit = {this.handleSubmit}>
             {this.state.error ? alertMessage : null }
             {this.state.username_exists ? usernameAlert : null}
@@ -136,6 +136,7 @@ class Register extends Component {
                 placeholder = "Enter your name(at least 3 characters)"
                 value = {this.state.fullName}
                 onChange = {this.handleChange}
+                required
               />
             </div>
 
@@ -147,6 +148,7 @@ class Register extends Component {
                 placeholder = "Enter your username(at least 5 characters)"
                 value = {this.state.username}
                 onChange = {this.handleChange}
+                required
               />
             </div>
 
@@ -158,6 +160,7 @@ class Register extends Component {
                 placeholder = "Enter your email"
                 value = {this.state.email}
                 onChange = {this.handleChange}
+                required
               />
             </div>
 
@@ -170,6 +173,7 @@ class Register extends Component {
                 placeholder="Enter your password(atleast 6 characters)"
                 value = {this.state.password}
                 onChange={this.handleChange}
+                required
               />
             </div>
 
@@ -182,6 +186,7 @@ class Register extends Component {
                 placeholder="Confirm your password"
                 value = {this.state.ConfirmPassword}
                 onChange={this.handleChange}
+                required
               />
             </div>
 

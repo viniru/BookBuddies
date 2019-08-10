@@ -7,7 +7,7 @@ class Genres extends Component {
   };
 
   openGenres = () => {
-    this.props.activeComponent(this.props.id);
+    //this.props.activeComponent(this.props.id);
     var display = true;
     this.setState({ display });
   };

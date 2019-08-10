@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Home from '../HomePage/Home.jsx';
 import Register from './register.jsx';
+import Navbar from '../HomePage/navbar.jsx';
 
 class Login extends Component {
     state = {
@@ -59,7 +60,7 @@ class Login extends Component {
 
       const usernameAlert = <div className="alert alert-danger alert-dismissible">
                               <button type="button" className="close" data-dismiss="alert">&times;</button>
-                              <strong>Invalid Username!</strong> user not found,.
+                              <strong>Invalid Username!</strong> user not found.
                             </div>;
 
       const passwordAlert = <div className="alert alert-danger alert-dismissible">
@@ -68,7 +69,7 @@ class Login extends Component {
                             </div>;
 
       const output = this.state.success ?
-        <Home /> :
+        <Navbar username={this.state.username} /> :
         this.state.displayRegister ?
         <Register /> :
         <div className="jumbotron jumbotron-fluid">
@@ -85,6 +86,7 @@ class Login extends Component {
                 placeholder = "Enter your username"
                 value = {this.state.username}
                 onChange = {this.handleChange}
+                required
               />
             </div>
 
@@ -97,6 +99,7 @@ class Login extends Component {
                 placeholder="Enter your password"
                 value={this.state.password}
                 onChange={this.handleChange}
+                required
               />
             </div>
 

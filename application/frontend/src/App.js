@@ -6,7 +6,8 @@ import "bootstrap/dist/css/bootstrap.css";
 // import MyBooks from "./components/MyBooks/MyBooks.jsx";
 // import Login from "./components/Authentication/login.jsx"
 // import Home from "./components/HomePage/Home.jsx"
-import Register from "./components/Authentication/register.jsx"
+// import Register from "./components/Authentication/register.jsx"
+import Navbar from "./components/HomePage/navbar.jsx";
 
 class App extends Component {
   state = {};
@@ -14,7 +15,7 @@ class App extends Component {
     return (
       <div>
         <h1>Book Buddies</h1>
-        <Register />
+        <Navbar />
       </div>
     );
   }
