@@ -181,3 +181,14 @@ def update_password(username, new_password):
     cur.close()
 
 #######################################################################################################################
+def getAllUsers():
+    cur = get_cursor()
+    cur.execute('''select u_id,name from User''');
+    return cur.fetchall()
+
+
+@ur.route('/all', methods=['GET'])
+def all():
+    response = {}
+    response['response'] = getAllUsers()
+    return response

@@ -108,7 +108,13 @@ def login():
     response["u_id"] = data['u_id']
 
     # User exists and Password Matched. logging in...
+<<<<<<< HEAD
     initialize_session(username, user_id)
+=======
+    initialize_session(username, u_id)
+    response["u_id"] = u_id
+    print(response)
+>>>>>>> 4b99f2c85505f72ac7e254107001da8dc93b92b3
     return jsonify(response)
 
 # get the details of the user...

@@ -193,7 +193,11 @@ def validityOfRequest(u_id_s,u_id_r):
 @friend.route('/sendrequest',methods=['POST'])
 def sendRequest():
 	response = {}
+<<<<<<< HEAD
 	u_id_s = int(request.json['u_id_s'])
+=======
+	u_id_s = int(request.json['u_id_s'])			
+>>>>>>> 4b99f2c85505f72ac7e254107001da8dc93b92b3
 	u_id_r = int(request.json['u_id_r'])
 	response['response'] = validityOfRequest(u_id_s,u_id_r)
 	return response

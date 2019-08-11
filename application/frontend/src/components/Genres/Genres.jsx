@@ -1,17 +1,61 @@
 import React, { Component } from "react";
-import GenresList from "./GenresList.jsx";
-
 class Genres extends Component {
   state = {
-    display: false
+    count: "0",
+    genres: [],
+    display: {
+      genres: false,
+      bookList: false
+    }
   };
 
+<<<<<<< HEAD
   openGenres = () => {
     var display = true;
     this.setState({ display });
+=======
+  formatCount() {
+    return this.state.count;
+  }
+
+  handleViewGenreBooks = event => {
+    this.setState({
+      genre_selected: event.target.value,
+      display: {
+        genres: false,
+        bookList: true
+      }
+    });
+>>>>>>> 4b99f2c85505f72ac7e254107001da8dc93b92b3
   };
 
+  componentDidMount() {
+    fetch("http://localhost:5000/genre/list")
+      .then(response => response.json())
+      .then(
+        result => {
+          this.setState({
+            isLoaded: true,
+            display: { genres: true },
+            genres: result.response,
+            count: result.response.length,
+            genre_selected: null
+          });
+        },
+
+        error => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+
+          console.log("error : " + error);
+        }
+      );
+  }
+
   render() {
+<<<<<<< HEAD
     return (
       <React.Fragment>
           <button
@@ -22,7 +66,38 @@ class Genres extends Component {
           </button>
         {this.state.display && <GenresList />}
       </React.Fragment>
+=======
+    var container = {
+      width: "75%"
+    };
+
+    const genres = (
+      <div className="container">
+        <div className="list-group">
+          {" "}
+          <br />
+          {this.state.genres.map(genre => (
+            <button
+              className="list-group-item list-group-item-primary btn btn-link"
+              type="button"
+              name={genre}
+              value={genre}
+              onClick={this.handleViewGenreBooks}
+              key={genre}
+            >
+              {genre}
+            </button>
+          ))}
+        </div>
+      </div>
+>>>>>>> 4b99f2c85505f72ac7e254107001da8dc93b92b3
     );
+
+    return this.state.display.genres ? (
+      genres
+    ) : this.state.display.bookList ? (
+      <h1>display the books here</h1>
+    ) : null;
   }
 }
 
