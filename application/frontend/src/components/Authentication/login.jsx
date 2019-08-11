@@ -97,7 +97,8 @@ class Login extends Component {
                               <strong>Wrong password!</strong> Please try again.
                             </div>;
 
-      const loginForm = <div className="jumbotron jumbotron-fluid">
+      const loginForm = <div className="jumbotron jumbotron-fluid offset-mt-5">
+
                           <div className="container">
                           <h1>Login</h1>
                           <form onSubmit = {this.handleSubmit}>
@@ -145,10 +146,8 @@ class Login extends Component {
       return (
         <div>
           {output}
-        </div>
+          </div>
       );
-
-    return <div>{output}</div>;
   }
 }
 

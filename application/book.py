@@ -265,9 +265,9 @@ def addcomment():
     b_id = request.json['b_id']
     title = request.json['title']
     add_to_Comments(u_id, b_id, title)
-    return 'Success'
+    return get_comments_on_book(b_id)
 
-
+#adds comment to the Comments table
 def add_to_Comments(u_id, b_id, title):
     db = get_db()
     cur = db.connection.cursor()
@@ -276,6 +276,20 @@ def add_to_Comments(u_id, b_id, title):
     db.connection.commit()
     cur.close()
 
+# return list of comments on a particular book
+def get_comments_on_book(b_id):
+    cur = get_cursor()
+    #Querying...
+    cur.execute('''SELECT Comments.c_id, Comments.title, Comments.comment_date, User.username, Comments.c_id, Comments.u_id
+        FROM Comments
+        LEFT JOIN User
+        ON Comments.u_id = User.u_id
+        WHERE Comments.b_id = %s ''', [b_id])
+
+    result = cur.fetchall()
+    cur.close()
+    return jsonify(result)
+
 #######################################################################################################################
 
 
@@ -283,16 +297,16 @@ def add_to_Comments(u_id, b_id, title):
 @bk.route('/deletecomment', methods=['POST'])
 def deletecomment():
     c_id = request.json['c_id']
-
+    b_id = request.json['b_id']
     delete_from_Comment(c_id)
 
-    return 'Success'
+    return get_comments_on_book(b_id)
 
 def delete_from_Comment(c_id):
     db = get_db()
     cur = db.connection.cursor()
     # Querying...
-    cur.execute('''DELETE FROM Comments WHERE c_id = %s''', (c_id))      # removes from the Comments able
+    cur.execute('''DELETE FROM Comments WHERE c_id = %s''', [c_id])      # removes from the Comments able
     #cur.execute('''UPDATE Comments SET title=NULL WHERE c_id = %s ''' , (c_id))       # sets content of comment to null.
     db.connection.commit()
     cur.close()
@@ -309,30 +323,5 @@ def getallbooks():
 
     result = cur.fetchall()
     return jsonify(result)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #########################################################################################################################

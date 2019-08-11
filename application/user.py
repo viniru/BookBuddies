@@ -181,6 +181,9 @@ def update_password(username, new_password):
     cur.close()
 
 #######################################################################################################################
+
+
+############################################### Get all users #########################################################
 def getAllUsers():
     cur = get_cursor()
     cur.execute('''select u_id,name from User''');
@@ -192,3 +195,47 @@ def all():
     response = {}
     response['response'] = getAllUsers()
     return response
+
+#######################################################################################################################
+
+@ur.route('getcomments', methods=['POST', 'GET'])
+def getcomments():
+    b_id = request.json['b_id']
+
+    return get_comments_on_book(b_id)
+
+def get_comments_on_book(b_id):
+    cur = get_cursor()
+    #Querying...
+    cur.execute('''SELECT Comments.c_id, Comments.title, Comments.comment_date, User.username, Comments.c_id, Comments.u_id
+        FROM Comments
+        LEFT JOIN User
+        ON Comments.u_id = User.u_id
+        WHERE Comments.b_id = %s ''', [b_id])
+
+    result = cur.fetchall()
+    cur.close()
+    return jsonify(result)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#######################################################################################################################
