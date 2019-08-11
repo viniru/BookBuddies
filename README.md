@@ -9,6 +9,7 @@ This is a Team Project
 3. If merging is not working out, or if you are having trouble executing cpx create-react-app after you have merged the project, then, first run the react app command and then merge the project
 4. use npm install react-bootstrap bootstrap in the frontend folder
 5. import bootstrap using " import "bootstrap/dist/css/bootstrap.css"
+6. use npm install --save font-awesome in frontend
 
 #how to start - GIT
 

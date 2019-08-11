@@ -1,9 +1,26 @@
-import "whatwg-fetch";
 import React, { Component } from "react";
 class Genres extends Component {
   state = {
-    count: 0,
-    genres: []
+    count: "0",
+    genres: [],
+    display: {
+      genres: false,
+      bookList: false
+    }
+  };
+
+  formatCount() {
+    return this.state.count;
+  }
+
+  handleViewGenreBooks = event => {
+    this.setState({
+      genre_selected: event.target.value,
+      display: {
+        genres: false,
+        bookList: true
+      }
+    });
   };
 
   componentDidMount() {
@@ -13,14 +30,12 @@ class Genres extends Component {
         result => {
           this.setState({
             isLoaded: true,
+            display: { genres: true },
             genres: result.response,
-            count: result.response.length
+            count: result.response.length,
+            genre_selected: null
           });
         },
-
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
 
         error => {
           this.setState({
@@ -34,15 +49,36 @@ class Genres extends Component {
   }
 
   render() {
-    return (
-      <button onClick="" className="btn btn-primary m-4 btn-lg">
-        Genres({this.formatCount()})
-      </button>
-    );
-  }
+    var container = {
+      width: "75%"
+    };
 
-  formatCount() {
-    return this.state.count;
+    const genres = (
+      <div className="container">
+        <div className="list-group">
+          {" "}
+          <br />
+          {this.state.genres.map(genre => (
+            <button
+              className="list-group-item list-group-item-primary btn btn-link"
+              type="button"
+              name={genre}
+              value={genre}
+              onClick={this.handleViewGenreBooks}
+              key={genre}
+            >
+              {genre}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+
+    return this.state.display.genres ? (
+      genres
+    ) : this.state.display.bookList ? (
+      <h1>display the books here</h1>
+    ) : null;
   }
 }
 

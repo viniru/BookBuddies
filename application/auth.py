@@ -1,4 +1,5 @@
 import functools
+import json
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
 )
@@ -24,25 +25,36 @@ class RegisterForm(Form):
     confirm  = PasswordField('Confirm Password')
 
 # Register
-@bp.route('/register' , methods=['GET','POST'])
+@bp.route('/register' , methods=['POST'])
 def register():
-    form = RegisterForm(request.form)
-    if request.method == 'POST' and form.validate():
-        # Getting data from wtform if...
-        name = form.name.data
-        email = form.email.data
-        username = form.username.data
-        password = sha256_crypt.encrypt(str(form.password.data))  # Password encrypted...
+    name = request.json['name']
+    email = request.json['email']
+    username = request.json['username']
+    password = sha256_crypt.encrypt(str(request.json['password']))  # encrypt password
 
-        if email_exists(email):
-            return 'email already exists'
-        elif username_exists(username):
-            return 'username already exists'
+    response = {
+        "success" : False,
+        "email_exists" : False,
+        "username_exists" : False
+    }
 
-        # email and username are unique.. Registering new user....
-        return add_User(name, email, username, password)
+    if email_exists(email):
+        response["email_exists"] = True
 
-    return render_template('register.html', form=form)
+    if username_exists(username):
+        response["username_exists"] = True
+
+    if response["username_exists"] or response["email_exists"]:
+        return json.dumps(response)
+
+    # email and username are unique.. Registering new user....
+    if(add_User(name, email, username, password)):
+        response['success'] = True
+
+    login()
+
+    return  json.dumps(response)
+
 
 # return True if email already exists..
 def email_exists(email):
@@ -73,41 +85,46 @@ def add_User(name, email, username, password):
     db = get_db()
     cur = db.connection.cursor()
 
-    cur.execute('''INSERT INTO  User(name, username, email, password) VALUES(%s, %s, %s, %s)''', (name, username, email, password))
+    cur.execute('''INSERT INTO User(name, username, email, password) VALUES(%s, %s, %s, %s)''', (name, username, email, password))
     db.connection.commit()
     cur.close()
 
-    return 'Success'
+    return True
 
 ########################################################################################################################################
 
 
 ########################################################### Login ######################################################################
-@bp.route('/login', methods = ['GET', 'POST'])
+@bp.route('/login', methods = ['POST'])
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password_entered = request.form['password']
-        data  = get_details(username)
+    username = request.json['username']
+    password_entered = request.json['password']
+    data  = get_details(username)
 
-        if data is None:                    # No user exists
-            return 'No user found'
-            # flash('No user found' )
-            # return render_template('login.html')
+    response = {
+        "username_exists" : False,
+        "password_matched" : True
+    }
 
-        password = data['password']
-        u_id = data['u_id']
+    if data is None:                    # No user exists
+        return json.dumps(response);
 
-        if not sha256_crypt.verify(password_entered, password):    # compare passwords
-            return 'Wrong Password'                               # password didn't match
-            # flash('Wrong Password')
-            # return render_template('login.html')
+    response["username_exists"] = True       # username does exist..
 
-        # User exists and Password Matched. logging in...
-        initialize_session(username, u_id)
-        return 'You are Logged in'
+    password = data['password']
+    u_id = data['u_id']
 
-    return render_template('login.html')
+    if not sha256_crypt.verify(password_entered, password):     # compare passwords
+        response["password_matched"] = False;
+        return json.dumps(response)                               # password didn't match
+
+    response["password_matched"] = True                    # password matched...
+
+    # User exists and Password Matched. logging in...
+    initialize_session(username, u_id)
+    response["u_id"] = u_id
+    print(response)
+    return jsonify(response)
 
 # get the details of the user...
 def get_details(username):

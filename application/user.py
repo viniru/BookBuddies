@@ -1,4 +1,5 @@
 import functools
+import json
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
 )
@@ -50,7 +51,7 @@ def add_book_for_user(u_id, b_id, status):
 
 
 ########################################### View books for a user ####################################################
-@ur.route('/viewbooks', methods=['GET', 'POST'])
+@ur.route('/viewbooks', methods=['POST'])
 def viewbooks():
     u_id = request.json['u_id']
     status = request.json['status']
@@ -72,10 +73,7 @@ def getbooks(u_id, status):
     books = cur.fetchall()
     cur.close()
 
-    if books > 0:
-        return jsonify(books)
-    else:
-        return 'No Books'
+    return jsonify(books)
 
 #######################################################################################################################
 
@@ -136,7 +134,7 @@ def changepassword():
     # u_id = session.get('u_id')     # username not required..
     old_password = request.json['old_password']
     new_password = sha256_crypt.encrypt(str(request.json['new_password']))
-    
+
     if password_matches(username, old_password):
         update_password(username, new_password)
     else:
@@ -168,3 +166,14 @@ def update_password(username, new_password):
     cur.close()
 
 #######################################################################################################################
+def getAllUsers():
+    cur = get_cursor()
+    cur.execute('''select u_id,name from User''');
+    return cur.fetchall()
+
+
+@ur.route('/all', methods=['GET'])
+def all():
+    response = {}
+    response['response'] = getAllUsers()
+    return response
