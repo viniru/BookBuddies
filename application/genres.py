@@ -24,8 +24,8 @@ def selectGenresIdDB():                 #Database operations
     genresSet = []
     for ele in genres:
         genresSet.append(ele['g_id'])
-    return genresSet  
-    
+    return genresSet
+
 
 def selectGenres():                     # make a call to function that accesses database
     genres = selectGenresDB()
@@ -140,10 +140,10 @@ def listGenre():
 
 #######################################################################################################
 @genre.route('/listgenreid', methods=['GET'])         #Controller
-def listGenreId():  
+def listGenreId():
     response = {}                         #list all the genres_id present
     response['response'] = selectGenresIdDB()
-    return response    
+    return response
 #######################################################################################################
 @genre.route('/getbooksbygenreid', methods=['POST'])         #Controller
 def getBooksByGenreId():             # get a list of books with some details of a particular genre id
@@ -175,14 +175,14 @@ def getBooksIdsByGenre():             # get a list of books with some details of
 
 #######################################################################################################
 @genre.route('/getgenreidbygenre', methods=['POST'])         #Controller
-def getGenreIdByGenre(): 
+def getGenreIdByGenre():
     response = {}                       # get a list of books with some details of a particular genre
     genre = request.json['genre']
     response['response']  = get_genre_id(genre)
     return response
 #######################################################################################################
 @genre.route('/getgenrebygenreid', methods=['POST'])         #Controller
-def getGenreByGenreId(): 
+def getGenreByGenreId():
     response = {}                       # get a list of books with some details of a particular genre
     g_id = request.json['g_id']
     response['reponse']  = get_Genre_By_Genre_Id(g_id)

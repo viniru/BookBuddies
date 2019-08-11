@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Home from '../HomePage/Home.jsx';
 import Login from './login.jsx';
+import Navbar from '../HomePage/navbar.jsx'
 
 class Register extends Component {
     state = {
@@ -117,7 +117,7 @@ class Register extends Component {
                             </div>;
 
       const output = this.state.success ?
-      <Home /> :
+      <Navbar /> :
       this.state.displayLogin ?
       <Login /> :
       <div className ="jumbotron jumbotron-fluid">

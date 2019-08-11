@@ -5,19 +5,19 @@ import Books from "../Books/Books.jsx";
 import Friends from "../Friends/Friends.jsx";
 import Genres from "../Genres/Genres.jsx";
 import MyBooks from "../MyBooks/MyBooks.jsx";
-import Home from './Home.jsx'
 
 class Navbar extends Component {
 
   state = {
-    username : this.props.username,
+    u_id : this.props.u_id,
+    loggedIn : this.props.loggedIn,
     display : {
         MyBooks : false,
         Books : false,
         Genres : false,
         Friends : false,
         SignUp : false,
-        SignIn : false,
+        SignIn : true,
         SignOut : false
     },
   };
@@ -34,30 +34,33 @@ class Navbar extends Component {
     };
 
     display[event.target.name] = true;
-
     this.setState({ display });
-    if(event.target.name.includes('SignOut')) {
-      this.setState({username : ""});
+
+    if(event.target.name === 'SignOut') {
+      this.setState({
+        u_id : null,
+        loggedIn : false
+      });
     }
   }
 
 
   render() {
-    console.log(this.state);
+
     const mybooks = <div className="mr-2">
-                      {this.state.username ? <button className="btn btn-info" name="MyBooks" onClick={this.handleClick}> <i className="fa fa-user-circle"/>My Books
+                      {this.state.u_id ? <button className="btn btn-info" name="MyBooks" onClick={this.handleClick}> <i className="fa fa-user-circle"/>My Books
                       </button>:<button className="btn btn-info btn-primary" name="MyBooks" onClick={this.handleClick}disabled ><i className="fa fa-user-circle"/>My Books
                       </button>}
                     </div>;
 
     const friends = <div className="mx-2">
-                      {this.state.username ? <button className="btn btn-info" name="Friends" onClick={this.handleClick}> <i className="fa fa-user-circle"/>Friends
+                      {this.state.u_id ? <button className="btn btn-info" name="Friends" onClick={this.handleClick}> <i className="fa fa-user-circle"/>Friends
                       </button>:<button className="btn btn-info btn-primary" name="Friends" onClick={this.handleClick}disabled ><i className="fa fa-user-circle"/>Friends
                       </button>}
                     </div>;
 
     const signUp =  <div className="mx-1">
-                        <button className="btn btn-success" name="SignUp" onClick={this.handleClick}>
+                      <button className="btn btn-success" name="SignUp" onClick={this.handleClick}>
                         <i className="fa fa-user"/>Sign up
                       </button>
                     </div>;
@@ -112,15 +115,15 @@ class Navbar extends Component {
                               <ul className="nav navbar-nav ml-auto">
 
                                 <li className="nav-item">
-                                  {this.state.username ? null : signUp}
+                                  {this.state.u_id ? null : signUp}
                                 </li>
 
                                 <li className="nav-item">
-                                  {this.state.username ?  null : signIn}
+                                  {this.state.u_id ?  null : signIn}
                                 </li>
 
                                 <li className="nav-item">
-                                  {this.state.username ? logOut : null}
+                                  {this.state.u_id ? logOut : null}
                                 </li>
 
                               </ul>
@@ -128,16 +131,15 @@ class Navbar extends Component {
                             </div>
                           </nav>;
 
-
     return (
       <div>
         {navigationBar}
-        {this.state.display.MyBooks ? <MyBooks /> : null }
-        {this.state.display.Books ? <Books /> : null }
-        {this.state.display.Genres ? <Genres id={4} visibility={true}/> : null}
-        {this.state.display.Friends ? <Friends /> : null }
+        {this.state.display.MyBooks ? <MyBooks u_id={this.state.u_id}/> : null }
+        {this.state.display.Books ? <Books u_id={this.state.u_id}/> : null }
+        {this.state.display.Genres ? <Genres u_id={this.state.u_id}/> : null }
+        {this.state.display.Friends ? <Friends u_id={this.state.u_id}/> : null }
         {this.state.display.SignUp ? <Register /> : null }
-        {this.state.display.SignIn ? <Login /> : null }
+        {this.state.display.SignIn ? <Login signedIn={this.state.loggedIn}/> : null }
         {this.state.display.SignOut ? <Login /> : null }
       </div>
     );

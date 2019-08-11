@@ -7,7 +7,6 @@ class Genres extends Component {
   };
 
   openGenres = () => {
-    //this.props.activeComponent(this.props.id);
     var display = true;
     this.setState({ display });
   };
@@ -15,15 +14,12 @@ class Genres extends Component {
   render() {
     return (
       <React.Fragment>
-        {this.props.visibility && (
           <button
             onClick={this.openGenres}
             className="btn btn-primary m-4 btn-lg"
           >
             Genres
           </button>
-        )}
-
         {this.state.display && <GenresList />}
       </React.Fragment>
     );

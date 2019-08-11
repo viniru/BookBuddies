@@ -2,7 +2,9 @@ import React, { Component } from "react";
 class GenresList extends Component {
   state = {
     count: 0,
-    genres: []
+    genres: [],
+    showgenre : false,
+    g_id : ""
   };
 
   formatCount() {
