@@ -16,8 +16,8 @@ class Books extends Component {
     }
 
     render() {
-      console.log(this.state);
-      const haha = <div className="container-fluid">
+
+      const output = <div className="container-fluid">
                     <div className="bg-secondary text-white">
                       <div className="container">
                         <div className="row">
@@ -32,7 +32,7 @@ class Books extends Component {
 
       return (
         <div>
-          {this.state.showBook ? <Book b_id={this.state.showBook} u_id={this.state.u_id}/> : haha}
+          {this.state.showBook ? <Book b_id={this.state.showBook} u_id={this.state.u_id}/> : output}
         </div>
       );
     }
