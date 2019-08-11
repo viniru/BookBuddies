@@ -54,7 +54,7 @@ class Genres extends Component {
     };
 
     const genres = (
-      <div className={container}>
+      <div className="container">
         <div className="list-group">
           {" "}
           <br />
