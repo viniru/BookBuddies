@@ -20,7 +20,10 @@ class BookList extends Component {
 
     render() {
 
-      const bookList = <div><span>Books</span><span className="float-right mr-5">Rating</span><p></p>
+      const bookList = <div>
+                          <span className="ml-4">Title</span>
+                          <span className="float-right mr-5">Rating</span>
+                          <p></p>
                           <ul>
                             {this.state.loaded ? this.state.books.map( (book,index) =>
                                 <li key={book.b_id.toString()}>
@@ -41,7 +44,6 @@ class BookList extends Component {
                                         <i className={book.rating >= 5 ? "fa fa-star" : "fa fa-star-o"} aria-hidden="true"></i>
                                     </span>
                                   </span>
-
                                 </li>
                             ): "loading..."}
                           </ul>
