@@ -52,7 +52,7 @@ class Friends extends Component {
     let friend_id = event.target.value;
     this.executeURL(
       "http://localhost:5000/friends/acceptrequest",
-      21,
+      this.props.u_id,
       friend_id
     ).then(result => {
       this.fetchFriends();
@@ -98,7 +98,7 @@ class Friends extends Component {
     var friend_id = event.target.value;
     this.executeURL(
       "http://localhost:5000/friends/cancelrequest",
-      21,
+      this.props.u_id,
       friend_id
     ).then(result => {
       console.log(result);
@@ -110,7 +110,7 @@ class Friends extends Component {
     var friend_id = event.target.value;
     this.executeURL(
       "http://localhost:5000/friends/unfriend",
-      21,
+      this.props.u_id,
       friend_id
     ).then(result => {
       this.fetchFriends();
@@ -144,7 +144,7 @@ class Friends extends Component {
   };
 
   fetchFriends() {
-    let u_id = 21;
+    let u_id = this.props.u_id;
     let url_friends = "http://localhost:5000/friends/viewfriends";
     this.fetchDataFromURL(url_friends, u_id).then(result => {
       this.setState({
@@ -156,7 +156,7 @@ class Friends extends Component {
   }
 
   fetchFriendRequests() {
-    let u_id = 21;
+    let u_id = this.props.u_id;
     let url_requests = "http://localhost:5000/friends/viewrequestsrecieved";
     this.fetchDataFromURL(url_requests, u_id).then(result => {
       this.setState({
@@ -200,6 +200,7 @@ class Friends extends Component {
 
     const friends = (
       <center>
+        <br /> <br /> <br />
         <div class="row" style={container}>
           <div class="col" style={leftsubcont}>
             <div style={subcontheader}>Friends ({this.state.friendsCount})</div>
@@ -285,7 +286,7 @@ class Friends extends Component {
     ) : this.state.display.user ? (
       <User u_id_t={this.state.u_id_t} name_t={this.state.name_t} />
     ) : this.state.display.findFriends ? (
-      <FindFriends u_id="21" friends={this} />
+      <FindFriends u_id={this.props.u_id} friends={this} />
     ) : null;
   }
 }

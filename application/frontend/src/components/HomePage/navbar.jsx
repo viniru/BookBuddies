@@ -9,6 +9,7 @@ import MyBooks from "../MyBooks/MyBooks.jsx";
 class Navbar extends Component {
   state = {
     username: this.props.username,
+    u_id: this.props.u_id,
     display: {
       MyBooks: false,
       Books: false,
@@ -198,7 +199,7 @@ class Navbar extends Component {
         {this.state.display.MyBooks ? <MyBooks /> : null}
         {this.state.display.Books ? <Books /> : null}
         {this.state.display.Genres ? <Genres id={4} visibility={true} /> : null}
-        {this.state.display.Friends ? <Friends /> : null}
+        {this.state.display.Friends ? <Friends u_id={this.props.u_id} /> : null}
         {this.state.display.SignUp ? <Register /> : null}
         {this.state.display.SignIn ? <Login /> : null}
         {this.state.display.SignOut ? <Login /> : null}

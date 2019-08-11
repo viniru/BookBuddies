@@ -122,6 +122,7 @@ def login():
 
     # User exists and Password Matched. logging in...
     initialize_session(username, u_id)
+    response["u_id"] = u_id
     print(response)
     return jsonify(response)
 

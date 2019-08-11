@@ -6,6 +6,7 @@ class Login extends Component {
   state = {
     username: "",
     password: "",
+    u_id: null,
     success: false,
     displayRegister: false
   };
@@ -34,7 +35,8 @@ class Login extends Component {
         this.setState({
           usernameError: !json.username_exists,
           passwordError: !json.password_matched,
-          success: json.password_matched && json.username_exists
+          success: json.password_matched && json.username_exists,
+          u_id: json.u_id
         })
       );
   };
@@ -63,7 +65,7 @@ class Login extends Component {
     );
 
     const output = this.state.success ? (
-      <Navbar username={this.state.username} />
+      <Navbar username={this.state.username} u_id={this.state.u_id} />
     ) : this.state.displayRegister ? (
       <Register />
     ) : (
