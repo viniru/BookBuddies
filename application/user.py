@@ -14,14 +14,32 @@ ur = Blueprint('user', __name__, url_prefix='/user')
 @ur.route('/addbook', methods=['POST'])
 def addbook():
     u_id = request.json['u_id']
-    b_id = request.json['b_id']
+    book_name = request.json['book']
     status = request.json['status']
+
+    response = {
+        "book_exists" : False,
+        "exists_for_user" : False,
+        "success" : False
+    }
+
 
     if book_exists_for_user(u_id, b_id) :     # If book exists for same user...
         return 'Already exists!!'
     else:
         add_book_for_user(u_id, b_id, status)
         return 'Success'                            # Successfull addition of book...
+
+# Method to check if book exists
+def book_exists():
+    cur = get_cursor()
+    #Querying...
+    cur.execute('''SELECT b_id FROM Book WHERE title = %s''', [book_name])
+    result = cur.fetchone()
+
+    if result is not None:
+        return result['b_id']
+    return False
 
 # Method to check if the book already exists for the user...
 def book_exists_for_user(u_id, b_id):
@@ -63,7 +81,7 @@ def getbooks(u_id, status):
     cur = get_cursor()
 
     # Querying..
-    cur.execute('''SELECT Book.title
+    cur.execute('''SELECT Book.title, Book.b_id
         FROM BookList
         LEFT JOIN Book
         ON Book.b_id = BookList.b_id
@@ -82,23 +100,20 @@ def getbooks(u_id, status):
 @ur.route('/removebook', methods=['POST'])
 def removebook():
     u_id = request.json['u_id']
-    # u_id = session.get('u_id')
     b_id = request.json['b_id']
     status = request.json['status']
 
-    return remove_book_from_user(u_id, b_id, status)
+    remove_book_from_user(u_id, b_id, status)
+    return getbooks(u_id, status)
 
 # removes the book from user
 def remove_book_from_user(u_id, b_id, status):
     db = get_db()
     cur = db.connection.cursor()
-
     # Querying...
     cur.execute('''DELETE FROM BookList WHERE u_id = %s and b_id = %s and status = %s''', (u_id, b_id, status))
     db.connection.commit()
     cur.close()
-
-    return 'Removed'
 
 #######################################################################################################################
 

@@ -12,19 +12,6 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')        #we create a bluepri
 
 
 ######################################################### Register #####################################################################
-# Registration form, rendered using HTML...
-class RegisterForm(Form):
-    name = StringField('Name', [validators.Length(min=3, max=50)])
-    username = StringField('Username', [validators.Length(min=3, max=20)])
-    email = StringField('Email', [validators.Length(min=6, max=30)])
-    password = PasswordField('Password', [
-        validators.Length(min=5, max=15),
-        validators.DataRequired(),
-        validators.EqualTo('confirm', message='Passwords do not match')
-    ])
-    confirm  = PasswordField('Confirm Password')
-
-# Register
 @bp.route('/register' , methods=['POST'])
 def register():
     name = request.json['name']
@@ -50,8 +37,6 @@ def register():
     # email and username are unique.. Registering new user....
     if(add_User(name, email, username, password)):
         response['success'] = True
-
-    login()
 
     return  json.dumps(response)
 
@@ -103,7 +88,8 @@ def login():
 
     response = {
         "username_exists" : False,
-        "password_matched" : True
+        "password_matched" : True,
+        "u_id" : None
     }
 
     if data is None:                    # No user exists
@@ -112,18 +98,17 @@ def login():
     response["username_exists"] = True       # username does exist..
 
     password = data['password']
-    u_id = data['u_id']
+    user_id = data['u_id']
 
     if not sha256_crypt.verify(password_entered, password):     # compare passwords
         response["password_matched"] = False;
         return json.dumps(response)                               # password didn't match
 
     response["password_matched"] = True                    # password matched...
+    response["u_id"] = data['u_id']
 
     # User exists and Password Matched. logging in...
-    initialize_session(username, u_id)
-    response["u_id"] = u_id
-    print(response)
+    initialize_session(username, user_id)
     return jsonify(response)
 
 # get the details of the user...
@@ -137,11 +122,9 @@ def get_details(username):
     return data        # contains u_id and encrypted password..
 
 # initialize session for a user....
-def initialize_session(username, u_id):
-    session.clear()
-    session['logged_in'] = True
+def initialize_session(username, user_id):
     session['username'] = username
-    session['u_id'] = u_id
+    session['u_id'] = user_id
 
 ########################################################################################################################################
 

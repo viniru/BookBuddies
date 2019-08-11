@@ -1,5 +1,6 @@
-import React, { Component } from "react";
-import Login from "./login.jsx";
+import React, { Component } from 'react';
+import Login from './login.jsx';
+import Navbar from '../HomePage/navbar.jsx'
 
 class Register extends Component {
   state = {

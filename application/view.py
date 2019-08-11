@@ -34,7 +34,6 @@ def book():
     vr = cur.fetchall()
     response['Author'] = vr
 
-
     cur.execute('''SELECT c_id, title, likes, u_id FROM Comments WHERE b_id=%s''', b_id)
     vr = cur.fetchall()
     response['Comments'] = vr
