@@ -23,7 +23,6 @@ def book():
     response = {'Book':{}, 'Author':[], 'Comments':[], 'GenreBooks':[]} #Initializing the response to be given by the endpoint
     #Comments and GenreBooks are Lists instead of dictionaries because there can be multiple comments and genres
 
-    cur.execute('''SELECT title, rating, no_ratings, cover, description FROM Book WHERE b_id=%s''', b_id)
     cur.execute('''SELECT title, rating, no_ratings,  description FROM Book WHERE b_id=%s''', b_id)
     vr = cur.fetchall()
     if vr:	#If tuple is not empty
@@ -31,11 +30,9 @@ def book():
     else:
         return {'response': 'Invalid Book id'}
 
-    cur.execute('''SELECT a_id, name FROM Author WHERE b_id=%s''', b_id)
     cur.execute('''SELECT Author.a_id, name FROM Author inner join AuthorBooks on Author.a_id = AuthorBooks.a_id WHERE AuthorBooks.b_id=%s''',b_id)
     vr = cur.fetchall()
     response['Author'] = vr
-
 
     cur.execute('''SELECT c_id, title, likes, u_id FROM Comments WHERE b_id=%s''', b_id)
     vr = cur.fetchall()
