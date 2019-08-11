@@ -9,11 +9,6 @@ class Genres extends Component {
     }
   };
 
-<<<<<<< HEAD
-  openGenres = () => {
-    var display = true;
-    this.setState({ display });
-=======
   formatCount() {
     return this.state.count;
   }
@@ -26,7 +21,6 @@ class Genres extends Component {
         bookList: true
       }
     });
->>>>>>> 4b99f2c85505f72ac7e254107001da8dc93b92b3
   };
 
   componentDidMount() {
@@ -55,18 +49,6 @@ class Genres extends Component {
   }
 
   render() {
-<<<<<<< HEAD
-    return (
-      <React.Fragment>
-          <button
-            onClick={this.openGenres}
-            className="btn btn-primary m-4 btn-lg"
-          >
-            Genres
-          </button>
-        {this.state.display && <GenresList />}
-      </React.Fragment>
-=======
     var container = {
       width: "75%"
     };
@@ -90,7 +72,6 @@ class Genres extends Component {
           ))}
         </div>
       </div>
->>>>>>> 4b99f2c85505f72ac7e254107001da8dc93b92b3
     );
 
     return this.state.display.genres ? (

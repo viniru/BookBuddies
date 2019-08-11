@@ -1,11 +1,6 @@
-<<<<<<< HEAD
 import React, { Component } from 'react';
 import Login from './login.jsx';
 import Navbar from '../HomePage/navbar.jsx'
-=======
-import React, { Component } from "react";
-import Login from "./login.jsx";
->>>>>>> 4b99f2c85505f72ac7e254107001da8dc93b92b3
 
 class Register extends Component {
   state = {
@@ -52,35 +47,6 @@ class Register extends Component {
       this.setState({ error: "invalid credentials" });
     }
 
-<<<<<<< HEAD
-    render() {
-
-      const alertMessage = <div className="alert alert-danger alert-dismissible">
-                              <button type="button" className="close" data-dismiss="alert">&times;</button>
-                              <strong>Invalid Credentails!</strong> Please try again.
-                            </div>;
-
-      const emailAlert = <div className="alert alert-danger alert-dismissible">
-                              <button type="button" className="close" data-dismiss="alert">&times;</button>
-                              <strong>Invalid Email!</strong> email already exists.
-                            </div>;
-
-      const usernameAlert = <div className="alert alert-danger alert-dismissible">
-                              <button type="button" className="close" data-dismiss="alert">&times;</button>
-                              <strong>Invalid Username!</strong> Username already exists.
-                            </div>;
-
-      const passwordAlert = <div className="alert alert-danger alert-dismissible">
-                              <button type="button" className="close" data-dismiss="alert">&times;</button>
-                              <strong>Password</strong> did not match.
-                            </div>;
-
-      const output = this.state.success ?
-      <Navbar /> :
-      this.state.displayLogin ?
-      <Login /> :
-      <div className ="jumbotron jumbotron-fluid">
-=======
     return isValid;
   };
 
@@ -165,7 +131,6 @@ class Register extends Component {
       <Login />
     ) : (
       <div className="jumbotron jumbotron-fluid">
->>>>>>> 4b99f2c85505f72ac7e254107001da8dc93b92b3
         <div className="container">
           <h1>Register </h1>
           <form onSubmit={this.handleSubmit}>
