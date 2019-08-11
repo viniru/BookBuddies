@@ -5,8 +5,8 @@ import React, { Component } from 'react';
 
 
 
-//editing backend for adding books...
-
+// editing backend for adding books...
+// and add onClick for adding books...
 
 
 
@@ -64,7 +64,7 @@ class MyBookList extends Component {
 
     render() {
 
-      const bookList = <ul>
+      const bookList = <ul>{this.state.books.length === 0 && this.state.loaded ? "You dont have any books" : null}
                           {this.state.loaded ? this.state.books.map( (book,index) =>
                               <li key={book.b_id.toString()}>
                                 <button

@@ -5,7 +5,7 @@ import Book from '../Books/Book.jsx'
 class MyBooks extends Component {
 
   state = {
-    u_id : 18, //this.props.u_id
+    u_id : this.props.u_id,
     showBook : null
   };
 
@@ -16,8 +16,10 @@ class MyBooks extends Component {
 
 
   render() {
-    const columns = <div className="container">
-                      <h1>My Books</h1>
+
+    const columns = <div className="container-fluid mt-5">
+                    <div className="bg-secondary">
+                      <h1 className="ml-3 text-white">My Books</h1>
 
                       <div className="parent-container d-flex">
 
@@ -27,10 +29,18 @@ class MyBooks extends Component {
                                 <div className = "jumbotron">
                                     <h3>Read</h3>
                                     <MyBookList handleClick={this.handleClick} u_id={this.state.u_id} status={1}/>
+
+                                    <div class="input-group">
+                                      <input type="text" class="form-control" placeholder="Enter Book Name" />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-primary ml-2" type="button">Add!</button>
+                                        </span>
+                                    </div>
+                                    
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
 
                         <div className="container">
                           <div className="row">
@@ -38,10 +48,18 @@ class MyBooks extends Component {
                               <div className = "jumbotron">
                                   <h3>Reading</h3>
                                   <MyBookList handleClick={this.handleClick} u_id={this.state.u_id} status={2}/>
+
+                                  <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Enter Book Name" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-primary ml-2" type="button">Add!</button>
+                                    </span>
+                                  </div>
+
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
 
                         <div className="container">
                           <div className="row">
@@ -49,11 +67,19 @@ class MyBooks extends Component {
                               <div className = "jumbotron">
                                   <h3>WishList</h3>
                                   <MyBookList handleClick={this.handleClick} u_id={this.state.u_id} status={3} />
+                                  <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Enter Book Name" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-primary ml-2" type="button">Add!</button>
+                                    </span>
+                                  </div>
+
                               </div>
                             </div>
                           </div>
                         </div>
 
+                      </div>
                       </div>
                     </div>;
 
