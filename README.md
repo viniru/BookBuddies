@@ -10,6 +10,7 @@ This is a Team Project
 4. use npm install react-bootstrap bootstrap in the frontend folder
 5. import bootstrap using " import "bootstrap/dist/css/bootstrap.css"
 6. use npm install --save font-awesome
+6. use npm install --save font-awesome in frontend
 
 #how to start - GIT
 

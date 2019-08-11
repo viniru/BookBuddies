@@ -52,6 +52,11 @@ def checkfriendsDB(u_id_1, u_id_2):
 def acceptrequest():
 	u_id_1 = request.json['u_id_1']
 	u_id_2 = request.json['u_id_2']
+	u_id_1 = request.json['u_id_s']
+	u_id_2 = request.json['u_id_r']
+	print('hi')
+	print(u_id_1)
+	print(u_id_2)
 	response = {}
 
 	if not usersExist(u_id_1, u_id_2):
@@ -90,6 +95,8 @@ def removeFriendRequestDB(u_id_1, u_id_2):
 def unfriend():
 	u_id_1 = request.json['u_id_1']
 	u_id_2 = request.json['u_id_2']
+	u_id_1 = request.json['u_id_s']
+	u_id_2 = request.json['u_id_r']
 	response = {}
 
 	if not usersExist(u_id_1, u_id_2):
@@ -192,6 +199,8 @@ def sendRequest():
 	response = {}
 	u_id_s = request.json['u_id_s']			
 	u_id_r = request.json['u_id_r']
+	u_id_s = int(request.json['u_id_s'])			
+	u_id_r = int(request.json['u_id_r'])
 	response['response'] = validityOfRequest(u_id_s,u_id_r)
 	return response
 	

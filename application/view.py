@@ -24,6 +24,7 @@ def book():
     #Comments and GenreBooks are Lists instead of dictionaries because there can be multiple comments and genres
 
     cur.execute('''SELECT title, rating, no_ratings, cover, description FROM Book WHERE b_id=%s''', b_id)
+    cur.execute('''SELECT title, rating, no_ratings,  description FROM Book WHERE b_id=%s''', b_id)
     vr = cur.fetchall()
     if vr:	#If tuple is not empty
         response['Book'] = vr[0]
@@ -31,6 +32,7 @@ def book():
         return {'response': 'Invalid Book id'}
 
     cur.execute('''SELECT a_id, name FROM Author WHERE b_id=%s''', b_id)
+    cur.execute('''SELECT Author.a_id, name FROM Author inner join AuthorBooks on Author.a_id = AuthorBooks.a_id WHERE AuthorBooks.b_id=%s''',b_id)
     vr = cur.fetchall()
     response['Author'] = vr
 
