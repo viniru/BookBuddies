@@ -5,24 +5,27 @@ import Books from "../Books/Books.jsx";
 import Friends from "../Friends/Friends.jsx";
 import Genres from "../Genres/Genres.jsx";
 import MyBooks from "../MyBooks/MyBooks.jsx";
+import Home from './Home.jsx';
 
 class Navbar extends Component {
   state = {
     u_id : this.props.u_id,
     loggedIn : this.props.loggedIn,
     display : {
+        Home : true,
         MyBooks : false,
         Books : false,
         Genres : false,
         Friends : false,
         SignUp : false,
-        SignIn : true,
+        SignIn : false,
         SignOut : false
     },
   };
 
   handleClick = event => {
     let display = {
+      Home : false,
       MyBooks: false,
       Books: false,
       Genres: false,
@@ -76,7 +79,7 @@ class Navbar extends Component {
                   </div>;
 
     const navigationBar = <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-                            <button className="btn btn-dark btn-lg" href="#">Book Buddies</button>
+                            <button className="btn btn-dark btn-lg" name="Home" onClick={this.handleClick}>Book Buddies</button>
                             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                               <span className="navbar-toggler-icon"></span>
                             </button>
@@ -132,6 +135,7 @@ class Navbar extends Component {
     return (
       <div>
         {navigationBar}
+        {this.state.display.Home ? <Home u_id={this.state.u_id} /> : null}
         {this.state.display.MyBooks ? <MyBooks u_id={this.state.u_id}/> : null }
         {this.state.display.Books ? <Books u_id={this.state.u_id}/> : null }
         {this.state.display.Genres ? <Genres u_id={this.state.u_id}/> : null }
