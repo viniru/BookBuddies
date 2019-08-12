@@ -18,7 +18,7 @@ class Books extends Component {
     render() {
 
       const output = <div className="container-fluid">
-                    <div className="bg-secondary text-white">
+                    <div className="bg-light">
                       <div className="container">
                         <div className="row">
                           <div className="col-12">
