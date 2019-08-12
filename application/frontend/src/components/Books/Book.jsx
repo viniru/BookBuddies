@@ -25,12 +25,7 @@ class Book extends Component {
           u_id: null
         }
       ],
-      GenreBooks: [
-        {
-          g_id: null,
-          name: null
-        }
-      ]
+      GenreBooks: []
     },
     display: {
       book: false
@@ -134,6 +129,13 @@ class Book extends Component {
       authors.push(this.state.book.Author[i].name);
       if (i !== this.state.book.Author.length - 1) authors.push(", ");
     }
+
+    const genres = [];
+    for (let i = 0; i < this.state.book.GenreBooks.length; i++) {
+      genres.push(this.state.book.GenreBooks[i].name);
+      if (i !== this.state.book.GenreBooks.length - 1) genres.push(", ");
+    }
+
     const bookRating = (
       <Rating
         icon="star"
@@ -169,6 +171,13 @@ class Book extends Component {
             <br />
             Your Rating: {userRating}
           </b>
+          <br />
+          <b>Description: </b> {this.state.book.Book.description}
+          <br />
+          <b>Genres: </b>{" "}
+          {genres.map(genre => (
+            <span>{genre}</span>
+          ))}
         </div>
         <div>
           <Comments u_id={this.state.u_id} b_id={this.state.b_id} />
