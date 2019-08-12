@@ -8,7 +8,7 @@ import "bootstrap/dist/css/bootstrap.css";
 // import Home from "./components/HomePage/Home.jsx"
 // import Register from "./components/Authentication/register.jsx"
 import Navbar from "./components/HomePage/navbar.jsx";
-import Comments from "./components/Books/Comments.jsx";
+
 
 class App extends Component {
   state = {};
