@@ -113,7 +113,7 @@ class FindFriends extends Component {
             <button
               onClick={this.handleAddFriend}
               value={user.u_id}
-              className="btn btn-danger btn-sm"
+              className="btn btn-success btn-sm"
             >
               Send Friend Request
             </button>,
