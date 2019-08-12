@@ -107,7 +107,7 @@ class BookListElement extends Component {
       const commentBox = <div>
                             <textarea
                             className="form-control"
-                            placeholder="write a comment..."
+                            placeholder="Write a comment..."
                             rows="3"
                             value={this.state.typedComment}
                             onChange={this.handleChange}
@@ -129,7 +129,8 @@ class BookListElement extends Component {
                         <div className="comment-wrapper">
                             <div className="panel panel-info">
                                 <div className="panel-heading">
-                                    Comment panel
+
+                                    <h3 className="text-center">Comments  <i className="fa fa-comments ml-2 mr-2" />({this.state.comments.length})</h3><hr/>
                                 </div>
                                 <div className="panel-body">
                                     {commentBox}
