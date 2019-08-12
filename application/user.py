@@ -24,7 +24,7 @@ def addbook():
     }
 
     b_id = book_exists(book_name)
-    
+
     if b_id is False:
         response["book_exists"] = False
         return jsonify(response)
@@ -210,6 +210,8 @@ def all():
 
 #######################################################################################################################
 
+
+############################################### Get comments on a book ################################################
 @ur.route('getcomments', methods=['POST', 'GET'])
 def getcomments():
     b_id = request.json['b_id']
@@ -229,8 +231,49 @@ def get_comments_on_book(b_id):
     cur.close()
     return jsonify(result)
 
+#######################################################################################################################
 
 
+############################################### Get details of a user ################################################
+@ur.route('userdetails', methods=['POST', 'GET'])
+def userdetails():
+    u_id = request.json['u_id']
+
+    return get_details(u_id)
+
+def get_details(u_id):
+    cur = get_cursor()
+    #Querying...
+    cur.execute('''SELECT name, username, email, date_created FROM User WHERE u_id = %s ''', [u_id])
+
+    result = cur.fetchall()
+    cur.close()
+    return jsonify(result)
+
+#######################################################################################################################
+
+
+############################################### Get comments of a user ################################################
+@ur.route('/usercomments', methods=['POST'])
+def getusercomments():
+    u_id = request.json['u_id']
+
+    return get_user_comments(u_id)
+
+
+def get_user_comments(u_id):
+    cur = get_cursor()
+    #Querying...
+    cur.execute('''SELECT Comments.title, Comments.c_id, Comments.comment_date, Book.title as book
+        FROM Comments
+        LEFT JOIN Book
+        ON Book.b_id = Comments.b_id
+        WHERE u_id = %s ''', [u_id])
+
+    result = cur.fetchall()
+    cur.close()
+    print(result)
+    return jsonify(result)
 
 
 

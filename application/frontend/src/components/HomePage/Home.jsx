@@ -16,7 +16,7 @@ class Home extends Component {
               <li className="md-3 mt-2 font-italic" style={{fontSize : 16}}>Manage the books you are reading.</li>
               <li className="md-3 mt-2 font-italic" style={{fontSize : 16}}>Comment on your favorite books.</li>
               <li className="md-3 mt-2 font-italic" style={{fontSize : 16}}>Rate your favorite books.</li>
-              <li className="md-3 mt-2 font-italic" style={{fontSize : 16}}>List books by genre.</li>
+              <li className="md-3 mt-2 font-italic" style={{fontSize : 16}}>Find books by genre.</li>
               <li className="md-3 mt-2 font-italic" style={{fontSize : 16}}>Make friends and enjoy.</li>
             </ul>
           </div>
