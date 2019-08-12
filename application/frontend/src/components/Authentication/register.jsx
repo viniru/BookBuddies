@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Login from './login.jsx';
-import Navbar from '../HomePage/navbar.jsx'
 
 class Register extends Component {
+
   state = {
     fullName: "",
     username: "",
@@ -16,6 +16,7 @@ class Register extends Component {
     username_exists: false,
     email_exists: false
   };
+
 
   validate = () => {
     let isValid = true;
@@ -50,11 +51,13 @@ class Register extends Component {
     return isValid;
   };
 
+
   handleChange = event => {
     this.setState({
       [event.target.name]: event.target.value
     });
   };
+
 
   handleSubmit = event => {
     event.preventDefault();
@@ -84,14 +87,25 @@ class Register extends Component {
     }
   };
 
+
   handleLogin = event => {
     this.setState({ displayLogin: true });
   };
 
+
+  closeAlert = event => {
+    this.setState(
+      {
+        [event.target.name] : false
+      }
+    );
+  }
+
+
   render() {
     const alertMessage = (
       <div className="alert alert-danger alert-dismissible">
-        <button type="button" className="close" data-dismiss="alert">
+        <button type="button" className="close" name="error" onClick={this.closeAlert}>
           &times;
         </button>
         <strong>Invalid Credentails!</strong> Please try again.
@@ -100,7 +114,7 @@ class Register extends Component {
 
     const emailAlert = (
       <div className="alert alert-danger alert-dismissible">
-        <button type="button" className="close" data-dismiss="alert">
+        <button type="button" className="close" name="emailAlert" onClick={this.closeAlert}>
           &times;
         </button>
         <strong>Invalid Email!</strong> email already exists.
@@ -109,7 +123,7 @@ class Register extends Component {
 
     const usernameAlert = (
       <div className="alert alert-danger alert-dismissible">
-        <button type="button" className="close" data-dismiss="alert">
+        <button type="button" className="close" name="username_exists" onClick={this.closeAlert}>
           &times;
         </button>
         <strong>Invalid Username!</strong> Username already exists.
@@ -118,7 +132,7 @@ class Register extends Component {
 
     const passwordAlert = (
       <div className="alert alert-danger alert-dismissible">
-        <button type="button" className="close" data-dismiss="alert">
+        <button type="button" className="close" name="passwordAlert" onClick={this.closeAlert}>
           &times;
         </button>
         <strong>Password</strong> did not match.
