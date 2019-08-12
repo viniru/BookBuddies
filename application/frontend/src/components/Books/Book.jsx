@@ -150,7 +150,7 @@ class Book extends Component {
       />
     );
     return (
-      <div className="container">
+      <div className="jumbotron">
         <h2>{title}</h2>
         <h4>
           By{" "}

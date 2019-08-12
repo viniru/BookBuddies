@@ -8,16 +8,16 @@ import "bootstrap/dist/css/bootstrap.css";
 // import Home from "./components/HomePage/Home.jsx"
 // import Register from "./components/Authentication/register.jsx"
 import Navbar from "./components/HomePage/navbar.jsx";
+import Comments from "./components/Books/Comments.jsx";
 
 class App extends Component {
   state = {};
   render() {
     return (
       <div>
-        <center fontColor="green">
-          <h1>Book Buddies</h1>
-        </center>
-        <Navbar />
+        <h1>Book Buddies</h1>
+        <Navbar u_id={null} loggedIn={false} />
+        <Comments u_id={null} b_id={1} />
       </div>
     );
   }

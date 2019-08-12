@@ -107,7 +107,7 @@ def unfriend():
 
 	return jsonify(response)
 ########################################################################## VIEW FRIEND REQUESTS
-def viewRequestDB(u_id):	
+def viewRequestDB(u_id):
 	cur = get_cursor()
 	cur.execute('''select u_id,name from User where u_id in ( select u_id_s from FriendRequest where u_id_r = {0})'''.format(u_id))
 	return cur.fetchall()
@@ -120,13 +120,13 @@ def viewRequestsCompute(u_id):
 
 @friend.route('/viewrequestsrecieved',methods=['POST'])
 def viewRequests():
-	response = {}												
-	u_id = request.json['u_id']								    
+	response = {}
+	u_id = request.json['u_id']
 	response['response'] = viewRequestsCompute(u_id)
 	return response
 ########################################################################## VIEW FRIENDS
 
-def viewFriendsDB(u_id):	
+def viewFriendsDB(u_id):
 	cur = get_cursor()
 	cur.execute('''select u_id,name from User where u_id in ( select u_id_1 from Friends where u_id_2 = {0}
 				   UNION select u_id_2 from Friends where u_id_1 = {0})'''.format(u_id))
@@ -140,8 +140,8 @@ def viewFriendsCompute(u_id):
 
 @friend.route('/viewfriends',methods=['POST'])
 def viewFriends():
-	response = {}												
-	u_id = request.json['u_id']								    
+	response = {}
+	u_id = request.json['u_id']
 	response['response'] = viewFriendsCompute(u_id)
 	return response
 ########################################################################## cancel Request
@@ -164,8 +164,8 @@ def cancelRequestDB(u_id1,u_id2):
 
 @friend.route('/cancelrequest',methods=['POST'])
 def cancelRequest():
-	response = {}												
-	u_id_s = int(request.json['u_id_s'])								
+	response = {}
+	u_id_s = int(request.json['u_id_s'])
 	u_id_r = int(request.json['u_id_r'])
 	response['response'] = cancelRequestDB(u_id_s,u_id_r)
 	return response
@@ -188,14 +188,12 @@ def validityOfRequest(u_id_s,u_id_r):
 	elif FriendRequestExists(u_id_s,u_id_r):
 		return "Already sent"
 	else:
-		return sendRequestDB(u_id_s,u_id_r)			
+		return sendRequestDB(u_id_s,u_id_r)
 
 @friend.route('/sendrequest',methods=['POST'])
 def sendRequest():
 	response = {}
-	u_id_s = int(request.json['u_id_s'])			
+	u_id_s = int(request.json['u_id_s'])
 	u_id_r = int(request.json['u_id_r'])
 	response['response'] = validityOfRequest(u_id_s,u_id_r)
 	return response
-	
-
