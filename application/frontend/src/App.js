@@ -17,7 +17,6 @@ class App extends Component {
       <div>
         <h1>Book Buddies</h1>
         <Navbar u_id={null} loggedIn={false} />
-        <Comments u_id={null} b_id={1} />
       </div>
     );
   }

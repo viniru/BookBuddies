@@ -2,8 +2,12 @@
 //change u_id to this.props.u_id
 import React, { Component } from "react";
 import { Rating } from "semantic-ui-react";
+import Comments from "./Comments.jsx";
+
 class Book extends Component {
   state = {
+    u_id: this.props.u_id,
+    b_id: this.props.b_id,
     userRating: 0,
     book: {
       Author: [],
@@ -120,7 +124,7 @@ class Book extends Component {
       });
   }
   componentDidMount() {
-    this.updateBookRatings(1, 21);
+    this.updateBookRatings(this.state.b_id, this.state.u_id);
   }
 
   render() {
@@ -145,25 +149,30 @@ class Book extends Component {
         rating={this.state.userRating}
         maxRating={5}
         onRate={(_, data) => {
-          this.setRating(data.rating, 21, 1);
+          this.setRating(data.rating, this.state.u_id, this.state.b_id);
         }}
       />
     );
     return (
-      <div className="jumbotron">
-        <h2>{title}</h2>
-        <h4>
-          By{" "}
-          {authors.map(author => (
-            <span>{author}</span>
-          ))}
-        </h4>
-        <b>
-          {this.state.book.Book.no_ratings} people have rated this book:{" "}
-          {bookRating}
-          <br />
-          Your Rating: {userRating}
-        </b>
+      <div>
+        <div className="jumbotron">
+          <h2>{title}</h2>
+          <h4>
+            By{" "}
+            {authors.map(author => (
+              <span>{author}</span>
+            ))}
+          </h4>
+          <b>
+            {this.state.book.Book.no_ratings} people have rated this book:{" "}
+            {bookRating}
+            <br />
+            Your Rating: {userRating}
+          </b>
+        </div>
+        <div>
+          <Comments u_id={this.state.u_id} b_id={this.state.b_id} />
+        </div>
       </div>
     );
   }
