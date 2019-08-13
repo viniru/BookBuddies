@@ -97,17 +97,26 @@ class BookListElement extends Component {
      }
 
 
+     closeAlert = event => {
+       this.setState(
+         {
+           [event.target.name] : false
+         }
+       );
+     }
+
+
     render() {
 
       const plsLogIn = <div className="alert alert-danger alert-dismissible">
-                          <button type="button" className="close" data-dismiss="alert">&times;</button>
+                          <button type="button" className="close" name="triedPosting" onClick={this.closeAlert}>&times;</button>
                           <strong>Session not found!</strong> Please log in to comment.
                         </div>;
 
       const commentBox = <div>
                             <textarea
                             className="form-control"
-                            placeholder="write a comment..."
+                            placeholder="Write a comment..."
                             rows="3"
                             value={this.state.typedComment}
                             onChange={this.handleChange}
@@ -129,7 +138,8 @@ class BookListElement extends Component {
                         <div className="comment-wrapper">
                             <div className="panel panel-info">
                                 <div className="panel-heading">
-                                    Comment panel
+
+                                    <h3 className="text-center">Comments  <i className="fa fa-comments ml-2 mr-2" />({this.state.comments.length})</h3><hr/>
                                 </div>
                                 <div className="panel-body">
                                     {commentBox}

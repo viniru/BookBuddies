@@ -27,16 +27,8 @@ class MyBooks extends Component {
                             <div className="row">
                               <div className="col">
                                 <div className = "jumbotron">
-                                    <h3>Read</h3>
+                                    <h3 className="text-center">Read</h3>
                                     <MyBookList handleClick={this.handleClick} u_id={this.state.u_id} status={1}/>
-
-                                    <div className="input-group">
-                                      <input type="text" className="form-control" placeholder="Enter Book Name" />
-                                        <span className="input-group-btn">
-                                            <button className="btn btn-primary ml-2" type="button">Add!</button>
-                                        </span>
-                                    </div>
-
                                 </div>
                               </div>
                             </div>
@@ -46,16 +38,8 @@ class MyBooks extends Component {
                           <div className="row">
                             <div className="col">
                               <div className = "jumbotron">
-                                  <h3>Reading</h3>
+                                  <h3 className="text-center">Reading</h3>
                                   <MyBookList handleClick={this.handleClick} u_id={this.state.u_id} status={2}/>
-
-                                  <div className="input-group">
-                                    <input type="text" className="form-control" placeholder="Enter Book Name" />
-                                    <span className="input-group-btn">
-                                        <button className="btn btn-primary ml-2" type="button">Add!</button>
-                                    </span>
-                                  </div>
-
                               </div>
                             </div>
                           </div>
@@ -65,15 +49,8 @@ class MyBooks extends Component {
                           <div className="row">
                             <div className="col">
                               <div className = "jumbotron">
-                                  <h3>WishList</h3>
+                                  <h3 className="text-center">WishList</h3>
                                   <MyBookList handleClick={this.handleClick} u_id={this.state.u_id} status={3} />
-                                  <div className="input-group">
-                                    <input type="text" className="form-control" placeholder="Enter Book Name" />
-                                    <span className="input-group-btn">
-                                        <button className="btn btn-primary ml-2" type="button">Add!</button>
-                                    </span>
-                                  </div>
-
                               </div>
                             </div>
                           </div>

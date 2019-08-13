@@ -18,28 +18,38 @@ def addbook():
     status = request.json['status']
 
     response = {
-        "book_exists" : False,
+        "book_exists" : True,
         "exists_for_user" : False,
-        "success" : False
+        "books" : []
     }
+
+    b_id = book_exists(book_name)
+
+    if b_id is False:
+        response["book_exists"] = False
+        return jsonify(response)
 
 
     if book_exists_for_user(u_id, b_id) :     # If book exists for same user...
-        return 'Already exists!!'
+        response["exists_for_user"] = True
+        return response
     else:
-        add_book_for_user(u_id, b_id, status)
-        return 'Success'                            # Successfull addition of book...
+        add_book_for_user(u_id, b_id, status)                # Successfull addition of book...
+        response["books"] = getbooks(u_id, status, False)
+        return jsonify(response)
 
 # Method to check if book exists
-def book_exists():
+def book_exists(book_name):
     cur = get_cursor()
     #Querying...
     cur.execute('''SELECT b_id FROM Book WHERE title = %s''', [book_name])
     result = cur.fetchone()
+    cur.close()
 
-    if result is not None:
-        return result['b_id']
-    return False
+    if result is None:
+        return False
+
+    return result['b_id']
 
 # Method to check if the book already exists for the user...
 def book_exists_for_user(u_id, b_id):
@@ -74,10 +84,10 @@ def viewbooks():
     u_id = request.json['u_id']
     status = request.json['status']
 
-    return getbooks(u_id, status)
+    return getbooks(u_id, status, True)
 
 # returns the books for a user with a particular status...
-def getbooks(u_id, status):
+def getbooks(u_id, status, returnjson):
     cur = get_cursor()
 
     # Querying..
@@ -91,7 +101,9 @@ def getbooks(u_id, status):
     books = cur.fetchall()
     cur.close()
 
-    return jsonify(books)
+    if returnjson:
+        return jsonify(books)
+    return books
 
 #######################################################################################################################
 
@@ -104,7 +116,7 @@ def removebook():
     status = request.json['status']
 
     remove_book_from_user(u_id, b_id, status)
-    return getbooks(u_id, status)
+    return getbooks(u_id, status, True)
 
 # removes the book from user
 def remove_book_from_user(u_id, b_id, status):
@@ -198,6 +210,8 @@ def all():
 
 #######################################################################################################################
 
+
+############################################### Get comments on a book ################################################
 @ur.route('getcomments', methods=['POST', 'GET'])
 def getcomments():
     b_id = request.json['b_id']
@@ -217,8 +231,49 @@ def get_comments_on_book(b_id):
     cur.close()
     return jsonify(result)
 
+#######################################################################################################################
 
 
+############################################### Get details of a user ################################################
+@ur.route('userdetails', methods=['POST', 'GET'])
+def userdetails():
+    u_id = request.json['u_id']
+
+    return get_details(u_id)
+
+def get_details(u_id):
+    cur = get_cursor()
+    #Querying...
+    cur.execute('''SELECT name, username, email, date_created FROM User WHERE u_id = %s ''', [u_id])
+
+    result = cur.fetchall()
+    cur.close()
+    return jsonify(result)
+
+#######################################################################################################################
+
+
+############################################### Get comments of a user ################################################
+@ur.route('/usercomments', methods=['POST'])
+def getusercomments():
+    u_id = request.json['u_id']
+
+    return get_user_comments(u_id)
+
+
+def get_user_comments(u_id):
+    cur = get_cursor()
+    #Querying...
+    cur.execute('''SELECT Comments.title, Comments.c_id, Comments.comment_date, Book.title as book
+        FROM Comments
+        LEFT JOIN Book
+        ON Book.b_id = Comments.b_id
+        WHERE u_id = %s ''', [u_id])
+
+    result = cur.fetchall()
+    cur.close()
+    print(result)
+    return jsonify(result)
 
 
 

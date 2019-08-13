@@ -41,59 +41,34 @@ class Login extends Component {
       );
     };
 
-
-    handleSubmit = event => {
-      event.preventDefault();
-        fetch('http://localhost:5000/auth/login',
-          {
-            method : "post",
-            mode : 'cors',
-            body : JSON.stringify({
-              username : this.state.username,
-              password : this.state.password
-            }),
-            headers : {
-              'content-Type' : 'application/json'
-            }
-          }
-       ).then(response =>
-         response.json()
-       )
-       .then(json =>
-         this.setState(
-         {
-           usernameError : !json.username_exists,
-           passwordError : !json.password_matched,
-           success : json.password_matched && json.username_exists,
-           u_id : json.u_id
-         }
-       )
-     );
-  };
-
-  handleSignUp = event => {
-    this.setState({ displayRegister: true });
-  };
-
     handleSignUp = event => {
-      this.setState({displayRegister : true});
+      this.setState({ displayRegister: true });
+    };
+
+
+    closeAlert = event => {
+      this.setState(
+        {
+          [event.target.name] : false
+        }
+      );
     }
 
 
     render() {
 
       const loggedInAlert = <div className="alert alert-success alert-dismissible">
-                              <button type="button" className="close" data-dismiss="alert">&times;</button>
+                              <button type="button" className="close" name="signedIn" onClick={this.closeAlert}>&times;</button>
                               <strong>Success!</strong> You are now logged in.
                             </div>;
 
       const usernameAlert = <div className="alert alert-danger alert-dismissible">
-                              <button type="button" className="close" data-dismiss="alert">&times;</button>
+                              <button type="button" className="close" name="usernameError" onClick={this.closeAlert}>&times;</button>
                               <strong>Invalid Username!</strong> user not found.
                             </div>;
 
       const passwordAlert = <div className="alert alert-danger alert-dismissible">
-                              <button type="button" className="close" data-dismiss="alert">&times;</button>
+                              <button type="button" className="close" name="passwordError" onClick={this.closeAlert}>&times;</button>
                               <strong>Wrong password!</strong> Please try again.
                             </div>;
 
@@ -146,7 +121,7 @@ class Login extends Component {
       return (
         <div>
           {output}
-          </div>
+        </div>
       );
   }
 }
