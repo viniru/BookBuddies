@@ -97,10 +97,19 @@ class BookListElement extends Component {
      }
 
 
+     closeAlert = event => {
+       this.setState(
+         {
+           [event.target.name] : false
+         }
+       );
+     }
+
+
     render() {
 
       const plsLogIn = <div className="alert alert-danger alert-dismissible">
-                          <button type="button" className="close" data-dismiss="alert">&times;</button>
+                          <button type="button" className="close" name="triedPosting" onClick={this.closeAlert}>&times;</button>
                           <strong>Session not found!</strong> Please log in to comment.
                         </div>;
 
