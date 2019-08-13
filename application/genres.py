@@ -109,11 +109,11 @@ def getBookIdsByGenreId(g_id):  #get a list of book ids with g_id = something
 
 def selectBooksByGenreIdJson(g_id):     #fetch and merge results
     booksList = getBookIdsByGenreId(g_id)
-    reponse = {'response':[]}
-    selectBookDetails(reponse,booksList)
-    selectAuthorDetails(reponse,booksList)
+    response = {'response':[]}
+    selectBookDetails(response,booksList)
+    selectAuthorDetails(response,booksList)
 
-    return jsonify(reponse)
+    return jsonify(response)
 
 
 def selectBooks(g_id):         #check if the particular genre is present or not , then proceed
@@ -122,7 +122,7 @@ def selectBooks(g_id):         #check if the particular genre is present or not 
         response = selectBooksByGenreIdJson(g_id)
     else:
         response['response'] = 'Genre not present'  # if genre is not present in the database, return NOT FOUND
-        reponse = jsonify(response)
+        response = jsonify(response)
     return response
 #######################################################################################################
 
@@ -185,5 +185,22 @@ def getGenreIdByGenre():
 def getGenreByGenreId():
     response = {}                       # get a list of books with some details of a particular genre
     g_id = request.json['g_id']
-    response['reponse']  = get_Genre_By_Genre_Id(g_id)
+    response['response']  = get_Genre_By_Genre_Id(g_id)
+    return response
+
+#######################################################################################################
+
+def get_book_rating(g_id):
+    cur=get_cursor()
+    cur.execute('''select Book.b_id, rating, title
+                   from Book inner join GenreBooks
+                   on Book.b_id = GenreBooks.b_id
+                   where GenreBooks.g_id = {0}'''.format(g_id))
+    return cur.fetchall()
+
+@genre.route('/getbookandratingbygenreid', methods=['POST'])         #Controller
+def getbookandratingbygenreid():
+    response = {}                       # get a list of books with some details of a particular genre
+    g_id = request.json['g_id']
+    response['response']  = get_book_rating(g_id)
     return response

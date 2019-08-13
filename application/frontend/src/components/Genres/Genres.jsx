@@ -1,6 +1,11 @@
 import React, { Component } from "react";
+import GenreBooks from "./GenreBooks.jsx";
+
 class Genres extends Component {
   state = {
+    u_id: this.props.u_id,
+    g_id: null,
+    genre: null,
     count: "0",
     genres: [],
     display: {
@@ -14,13 +19,37 @@ class Genres extends Component {
   }
 
   handleViewGenreBooks = event => {
-    this.setState({
-      genre_selected: event.target.value,
-      display: {
-        genres: false,
-        bookList: true
+    let genre = event.target.value;
+    fetch("http://localhost:5000/genre/getgenreidbygenre", {
+      method: "post",
+      mode: "cors",
+      body: JSON.stringify({
+        genre: genre //this.props.u_id
+      }),
+      headers: {
+        "content-Type": "application/json"
       }
-    });
+    })
+      .then(response => response.json())
+      .then(
+        result => {
+          this.setState({
+            g_id: result.response,
+            genre: genre,
+            display: {
+              genres: false,
+              bookList: true
+            }
+          });
+        },
+
+        error => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      );
   };
 
   componentDidMount() {
@@ -77,7 +106,11 @@ class Genres extends Component {
     return this.state.display.genres ? (
       genres
     ) : this.state.display.bookList ? (
-      <h1>display the books here</h1>
+      <GenreBooks
+        u_id={this.state.u_id}
+        g_id={this.state.g_id}
+        genre={this.state.genre}
+      />
     ) : null;
   }
 }
