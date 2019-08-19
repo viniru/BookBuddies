@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./Friends.css";
+import User from "../User/User.jsx";
 
 class FindFriends extends Component {
   state = {
@@ -8,7 +9,9 @@ class FindFriends extends Component {
     display: {
       users: false,
       singleuser: false
-    }
+    },
+    u_id_t: null, // u_id of the person the user clicks, will be updated in handle view user
+    name_t: null
   };
 
   handleAddFriend = event => {
@@ -28,11 +31,15 @@ class FindFriends extends Component {
   };
 
   handleViewUser = event => {
+    let display = {
+      users: false,
+      singleuser: true
+    };
+
     this.setState({
-      display: {
-        users: false,
-        singleuser: true
-      }
+      display,
+      u_id_t: event.target.value,
+      name_t: event.target.name
     });
   };
 
@@ -126,7 +133,7 @@ class FindFriends extends Component {
     return this.state.display.users ? (
       users
     ) : this.state.display.singleuser ? (
-      <h>user</h>
+      <User u_id={this.state.u_id_t} name={this.state.name_t} />
     ) : null;
   }
 }

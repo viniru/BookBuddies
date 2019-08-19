@@ -284,7 +284,7 @@ class Friends extends Component {
     return this.state.display.friends ? (
       friends
     ) : this.state.display.user ? (
-      <User u_id_t={this.state.u_id_t} name_t={this.state.name_t} />
+      <User u_id={this.state.u_id_t} name={this.state.name_t} />
     ) : this.state.display.findFriends ? (
       <FindFriends u_id={this.props.u_id} friends={this} />
     ) : null;
