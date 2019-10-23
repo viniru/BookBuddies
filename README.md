@@ -16,7 +16,7 @@ This is a Team Project
 1. fork this project
 2. clone on your computer
 3. create a separate branch for your working( atleast 2, like vinayakDev and VinayakMaster)
-4. add your finctionalities in dev
+4. add your functionalities in dev
 5. once added, merge it with NameMaster, then with the final master
 
 #how to start - Project
